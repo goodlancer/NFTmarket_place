@@ -7,16 +7,17 @@
       >
         <md-card>
         <md-card-media-cover>
-          <md-card-media md-ratio="4:5">
+          <md-card-media md-ratio="1:1">
             <img
               src="https://lh3.googleusercontent.com/RZ9t1F2tmKCcuyJxcUj111ORWrvz1fwEkglzGSgBaTCF0iac0HGa1EMq5Ts8wxJg9NVAyUGW3ZT9Mgg2btmeLOXNNA29eFsoOcvl=s288"
               alt="nftToken"
+              @click="gotoItem"
             />
           </md-card-media>
 
           <md-card-area>
             <md-card-header>
-              <span class="md-title">Without text background</span>
+              <span class="md-title">Without text background {{index}}</span>
               <span class="md-subhead">I bet you can't read this</span>
             </md-card-header>
 
@@ -31,7 +32,6 @@
         v-model="infoPagination"
         with-text
         :page-count="totalPages"
-        @nextPage="nextpage()"
         >
       </pagination>
     </div>
@@ -55,6 +55,9 @@ export default {
   methods: {
     nextpage(){
       console.log(this.infoPagination);
+    },
+    gotoItem(){
+      this.$router.push({path:'/itemview/3'})
     }
   }
 };
