@@ -10,11 +10,31 @@
               <h4 slot="title" class="card-title">Regist</h4>
               <md-field class="md-form-group" slot="inputs">
                 <md-icon>face</md-icon>
-                <label>Full Name ...</label>
+                <label>First Name ...</label>
                 <md-input
-                  v-model="fullname"
+                  v-model="firstname"
                   type="text"
-                  aria-required="fullname"
+                  aria-required="firstname"
+                  required
+                ></md-input>
+              </md-field>
+              <md-field class="md-form-group" slot="inputs">
+                <md-icon>face</md-icon>
+                <label>Last Name ...</label>
+                <md-input
+                  v-model="lastname"
+                  type="text"
+                  aria-required="lastname"
+                  required
+                ></md-input>
+              </md-field>
+              <md-field class="md-form-group" slot="inputs">
+                <md-icon>account_circle</md-icon>
+                <label>User Name ...</label>
+                <md-input
+                  v-model="username"
+                  type="text"
+                  aria-required="username"
                   required
                 ></md-input>
               </md-field>
@@ -32,16 +52,6 @@
                 <md-icon>lock_outline</md-icon>
                 <label>Password...</label>
                 <md-input type="password" v-model="password"></md-input>
-              </md-field>
-              <md-field class="md-form-group" slot="inputs">
-                <md-icon>filter</md-icon>
-                <label>Wallet ...</label>
-                <md-input
-                  v-model="fullname"
-                  type="text"
-                  aria-required="fullname"
-                  required
-                ></md-input>
               </md-field>
               <md-button slot="footer" class="md-round md-success md-lg">
                 Get Started
@@ -64,9 +74,11 @@ export default {
   bodyClass: "register-page",
   data() {
     return {
-      fullname: null,
-      email: null,
-      password: null
+      firstname: '',
+      lastname: '',
+      username: '',
+      email: '',
+      password: ''
     };
   },
   props: {
