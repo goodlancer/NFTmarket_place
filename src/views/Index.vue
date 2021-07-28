@@ -28,21 +28,18 @@
               <md-field class="md-form-group" slot="inputs">
                 <md-icon>search</md-icon>
                 <label>Search...</label>
-                <md-input
-                  v-model="searchtxt"
-                  type="text"
-                ></md-input>
+                <md-input type="text" v-model="searchtxt"></md-input>
               </md-field>
               <div class="title">
                 <h3>Filter</h3>
               </div>
               <md-checkbox v-model="array" value="1">Mostly</md-checkbox>
               <md-checkbox v-model="array" value="2">Recently</md-checkbox>
-              <md-checkbox v-model="array" value="2">Oldest</md-checkbox>
-              <md-checkbox v-model="array" value="2">Sort</md-checkbox>
+              <md-checkbox v-model="array" value="3">Oldest</md-checkbox>
+              <md-checkbox v-model="array" value="4">Sort</md-checkbox>
               <div class="action">
                 <md-button class="md-round md-sm md-success md-lg">
-                  Search
+                  Search & Filter
                 </md-button>
               </div>
             </div>
@@ -50,7 +47,6 @@
           <div class="md-layout-item md-size-80">
             <market-list></market-list>
           </div>
-          
         </div>
       </div>
     </div>
@@ -85,13 +81,13 @@ export default {
     leaf1: {
       type: String,
       default: require("@/assets/img/leaf1.png")
-    },
+    }
   },
   data() {
     return {
       leafShow: false,
-      searchtxt: "",
-    }
+      searchtxt: ""
+    };
   },
   computed: {
     headerStyle() {
@@ -105,7 +101,6 @@ export default {
   }
 };
 </script>
-
 <style lang="scss">
 .section-download {
   .md-button + .md-button {
@@ -116,7 +111,6 @@ export default {
 .market-layout {
   margin: 0 !important;
 }
-
 
 // @media all and (min-width: 991px) {
 //   .btn-container {
