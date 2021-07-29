@@ -53,7 +53,7 @@
                 <label>Password...</label>
                 <md-input type="password" v-model="password"></md-input>
               </md-field>
-              <md-button slot="footer" class="md-round md-success md-lg">
+              <md-button slot="footer" class="md-round md-success md-lg" @click="register">
                 Get Started
               </md-button>
             </login-card>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { LoginCard } from "@/components";
 
 export default {
@@ -92,6 +93,26 @@ export default {
       return {
         backgroundImage: `url(${this.header})`
       };
+    }
+  },
+  methods: {
+    ...mapActions([
+      'signup',
+    ]),
+    register(){
+      alert("this is myy work");
+      const signDate = {
+        firstname: this.firstname,
+				lastname: this.lastname,
+				username: this.username,
+				email: this.email,
+				password: this.password,
+      }
+      this.signup(signDate).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   }
 };

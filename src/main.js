@@ -16,6 +16,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 
+// Vuex Store
+import store from './store/store'
+
 import MaterialKit from "./plugins/material-kit";
 
 Vue.config.productionTip = false;
@@ -36,5 +39,6 @@ Vue.mixin({
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");
