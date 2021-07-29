@@ -13,6 +13,7 @@ const mutations = {
       }
     }
     // Store data in localStorage
+    console.log('updateer');
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
   
