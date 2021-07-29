@@ -19,7 +19,7 @@
                 </div>
                 <div class="name">
                   <h3 class="title">Carla Hortensia</h3>
-                  <h6>Designer</h6>
+                  
                   <md-button
                     href="javascript:void(0)"
                     class="md-just-icon md-simple md-dribbble"

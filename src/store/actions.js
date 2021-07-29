@@ -46,6 +46,13 @@ const actions = {
 				reject(new Error(err));
 			})
 		})
+	},
+
+	logout(context){
+		return new Promise((resolve) => {
+			context.commit('LOGOUT');
+			resolve('loged out')
+		})
 	}
 }
 

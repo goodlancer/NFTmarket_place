@@ -18,7 +18,17 @@ const mutations = {
   },
   
   UPDATE_SIGNED(state, payload) {
-    state.loggedState = payload
+    const logged = localStorage.getItem("loggedState") || payload;
+    localStorage.setItem('loggedState', payload);
+    state.loggedState = logged;
+
+  },
+
+  LOGOUT(state){
+    state.loggedState = false;
+    state.AppActiveUser = {};
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('loggedState');
   }
 
 }

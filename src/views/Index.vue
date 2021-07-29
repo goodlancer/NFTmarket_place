@@ -33,10 +33,10 @@
               <div class="title">
                 <h3>Filter</h3>
               </div>
-              <md-checkbox v-model="array" value="1">Mostly</md-checkbox>
-              <md-checkbox v-model="array" value="2">Recently</md-checkbox>
-              <md-checkbox v-model="array" value="3">Oldest</md-checkbox>
-              <md-checkbox v-model="array" value="4">Sort</md-checkbox>
+              <md-checkbox v-model="filterval" value="1">Mostly</md-checkbox>
+              <md-checkbox v-model="filterval" value="2">Recently</md-checkbox>
+              <md-checkbox v-model="filterval" value="3">Oldest</md-checkbox>
+              <md-checkbox v-model="filterval" value="4">Sort</md-checkbox>
               <div class="action">
                 <md-button class="md-round md-sm md-success md-lg">
                   Search & Filter
@@ -66,26 +66,11 @@ export default {
       type: String,
       default: require("@/assets/img/vue-mk-header.jpg")
     },
-    leaf4: {
-      type: String,
-      default: require("@/assets/img/leaf4.png")
-    },
-    leaf3: {
-      type: String,
-      default: require("@/assets/img/leaf3.png")
-    },
-    leaf2: {
-      type: String,
-      default: require("@/assets/img/leaf2.png")
-    },
-    leaf1: {
-      type: String,
-      default: require("@/assets/img/leaf1.png")
-    }
   },
   data() {
     return {
       leafShow: false,
+      filterval: '',
       searchtxt: ""
     };
   },
@@ -111,10 +96,4 @@ export default {
 .market-layout {
   margin: 0 !important;
 }
-
-// @media all and (min-width: 991px) {
-//   .btn-container {
-//     display: flex;
-//   }
-// }
 </style>

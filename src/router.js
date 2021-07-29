@@ -7,13 +7,13 @@ import Login from "./views/Login.vue";
 import ItemView from "./views/Itemview.vue";
 import Register from "./views/Register";
 import Profile from "./views/Profile.vue";
-import MainNavbar from "./layout/MainNavbar.vue";
+// import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import HeadNavbar from "./layout/HeadNavbar.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
@@ -70,7 +70,7 @@ export default new Router({
     {
       path: "/profile",
       name: "profile",
-      components: { default: Profile, header: MainNavbar, footer: MainFooter },
+      components: { default: Profile, header: HeadNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 100 },
         footer: { backgroundColor: "black" }
@@ -85,3 +85,17 @@ export default new Router({
     }
   }
 });
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register', '/'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('userInfo');
+
+  if (authRequired && !loggedIn) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+export default router

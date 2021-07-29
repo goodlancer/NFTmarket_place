@@ -68,13 +68,19 @@ export default {
       'login',
     ]),
     signin(){
-      alert('this is signing');
       const signData = {
         username: this.username,
         password: this.password,
       }
       this.login(signData).then((res) => {
         console.log(res);
+        console.log(this.$router);
+        // const {pending} = this.$router.history;
+        // if (pending) {
+        //   this.$router.push(pending.fullPath)
+        // } else {
+        //   this.$router.push('/')
+        // }
       }).catch((err) => {
         console.log(err);
       })

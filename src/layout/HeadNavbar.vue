@@ -42,14 +42,65 @@
                 <i class="material-icons">help</i>
                 <p>Faq</p>
               </md-list-item>
-              <md-list-item href="/#/login">
+              <md-list-item href="/#/login" v-if="!isAuthenticated">
                 <i class="material-icons">login</i>
                 <p>Login</p>
               </md-list-item>
-              <md-list-item href="/#/register">
+              <md-list-item href="/#/register" v-if="!isAuthenticated">
                 <i class="material-icons">person_add</i>
                 <p>Regist</p>
               </md-list-item>
+              <li class="md-list-item" v-if="isAuthenticated">
+                <a
+                  href="javascript:void(0)"
+                  class="md-list-item-router md-list-item-container md-button-clean dropdown"
+                >
+                  <div class="md-list-item-content">
+                    <drop-down direction="down">
+                      <md-button
+                        slot="title"
+                        class="md-button md-button-link md-white md-simple dropdown-toggle"
+                        data-toggle="dropdown"
+                      >
+                        <md-avatar class="md-small">
+                          <img :src="profilImg" alt="Avatar">
+                        </md-avatar>
+                        <p> {{ userName }}</p>
+                      </md-button>
+                      <ul
+                        class="dropdown-menu dropdown-menu-right"
+                      >
+                        <li class="dropdown-header">Account</li>
+                        <li>
+                          <a href="#/profile/" class="dropdown-item">Profile</a> 
+                        </li>
+                        <li>
+                          <a href="#" class="dropdown-item">
+                            Amount
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#pablo" class="dropdown-item"
+                            >Collections</a
+                          >
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                          <a href="#pablo" class="dropdown-item"
+                            >Create NFT</a
+                          >
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                          <a class="dropdown-item" @click="logout_func">
+                            Log Out
+                          </a>
+                        </li>
+                      </ul>
+                    </drop-down>
+                  </div>
+                </a>
+              </li>
             </md-list>
           </div>
         </div>
@@ -72,6 +123,7 @@ function resizeThrottler(actualResizeHandler) {
   }
 }
 
+import { mapGetters, mapActions } from 'vuex'
 import MobileMenu from "@/layout/MobileMenu";
 export default {
   components: {
@@ -92,21 +144,42 @@ export default {
           "warning",
           "info"
         ].includes(value);
-      }
+      },
     },
     colorOnScroll: {
       type: Number,
       default: 0
+    },
+    profilImg: {
+      type: String,
+      default: require("@/assets/img/faces/avatar.jpg")
     }
   },
 
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false
+      toggledClass: false,
+      userName: '',
     };
   },
+  computed: {
+    ...mapGetters([
+      'isAuthenticated',
+      'profile',
+    ]),
+  },
+
   methods: {
+    ...mapActions([
+      'logout'
+    ]),
+    logout_func() {
+      this.logout().then((res) => {
+        // alert('this is logout');
+        location.reload();
+      })
+    },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");
 
@@ -154,9 +227,21 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    this.userName = this.profile.username;
+    console.log(this.profile);
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
   }
 };
 </script>
+
+
+<style scoped>
+.myMenu{
+  padding: 0 !important;
+}
+.myMenubtn{
+  background: transparent !important;
+}
+</style>
