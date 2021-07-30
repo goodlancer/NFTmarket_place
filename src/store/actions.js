@@ -1,5 +1,6 @@
 import { LoginCard } from '../components';
-
+import authHeader from './authHeader';
+// const authHeader = require('./authHeader');
 const axios = require('axios')
 const apiUrl = 'http://127.0.0.1:3000/'
 
@@ -40,6 +41,7 @@ const actions = {
 				console.log(res);
 				context.commit('UPDATE_SIGNED', true);
 				context.commit('UPDATE_USER_INFO', res.data);
+				axios.defaults.headers.common['x-access-token'] = res.data.accessToken
 				resolve(res);
 			}).catch((err) => {
 				console.log(err);
@@ -48,9 +50,25 @@ const actions = {
 		})
 	},
 
+	updateProfile(context, payload){
+		return new Promise((resolve, reject) => {
+			var profileData = {
+				profileImg: payload
+			}
+
+			axios.post(`${apiUrl}api/user/profileImage`, profileData, { headers: authHeader() }).then((res) => {
+				resolve(res);
+				context.commit('UPDATE_USER_INFO', res.data);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
+
 	logout(context){
 		return new Promise((resolve) => {
 			context.commit('LOGOUT');
+			delete axios.defaults.headers.common['Authorization']
 			resolve('loged out')
 		})
 	}

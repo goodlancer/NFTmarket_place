@@ -12,45 +12,35 @@
               <div class="profile">
                 <div class="avatar">
                   <img
-                    :src="img"
+                    ref="profileImg"
+                    :src="getprofileImg"
                     alt="Circle Image"
                     class="img-raised rounded-circle img-fluid"
                   />
+                  <div class="circleBar">
+                    <div class="uploadAction" @click="uploadAvata">
+                      <md-icon class="Grey-50">draw</md-icon>
+                      <input
+                        type="file"
+                        ref="avatafile"
+                        class="hidden"
+                        name="avatafile"
+                        @change="onAvatapicker()"
+                        accept=".pdf, jpg, .jpeg, .png"
+                        >
+                    </div>
+                  </div>
                 </div>
                 <div class="name">
-                  <h3 class="title">Carla Hortensia</h3>
-                  
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-dribbble"
-                    ><i class="fab fa-dribbble"></i
-                  ></md-button>
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-twitter"
-                    ><i class="fab fa-twitter"></i
-                  ></md-button>
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-pinterest"
-                    ><i class="fab fa-pinterest"></i
-                  ></md-button>
+                  <h3 class="title">{{username}} <md-icon>edit</md-icon></h3>
                 </div>
               </div>
             </div>
           </div>
-          <div class="description text-center">
-            <p>
-              An artist of considerable range, Chet Faker — the name taken by
-              Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
-              and records all of his own music, giving it a warm, intimate feel
-              with a solid groove structure.
-            </p>
-          </div>
           <div class="profile-tabs">
             <tabs
-              :tab-name="['Studio', 'Work', 'Favorite']"
-              :tab-icon="['camera', 'palette', 'favorite']"
+              :tab-name="['Profile', 'Collection', 'MyContent']"
+              :tab-icon="['manage_accounts', 'palette', 'shopping_bag']"
               plain
               nav-pills-icons
               color-button="success"
@@ -58,13 +48,54 @@
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
                 <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
+                  <!-- <div class="md-layout-item md-size-25 ml-auto">
                     <img :src="tabPane1[0].image" class="rounded" />
                     <img :src="tabPane1[1].image" class="rounded" />
                   </div>
                   <div class="md-layout-item md-size-25 mr-auto">
                     <img :src="tabPane1[3].image" class="rounded" />
                     <img :src="tabPane1[2].image" class="rounded" />
+                  </div> -->
+                  <div class="md-layout-item md-layout md-layout-nowrap md-gutter md-size-25 ml-auto">
+                    <md-icon class="myMR-5">face</md-icon>
+                    <md-field>
+                      <label>First Name...</label>
+                      <md-input
+                        v-model="userProfile.firstname"
+                        type="text"
+                        aria-required="username"
+                        required
+                        :readonly="!editable"
+                      ></md-input>
+                    </md-field>
+                  </div>
+                  <div class="md-layout-item md-size-25 mr-auto">
+                    <md-field>
+                      <label class="title">Last Name...</label>
+                      <md-input
+                        v-model="userProfile.lastname"
+                        type="text"
+                        aria-required="username"
+                        required
+                        :readonly="!editable"
+                      ></md-input>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="md-layout">
+                  <div class="md-layout-item md-layout md-layout-nowrap md-gutter md-size-50 ml-auto mr-auto">
+                    <md-icon class="myMR-5">email</md-icon>
+                    <md-field>
+                      <label>Email</label>
+                      <md-input v-model="userProfile.email" type="email" :readonly="!editable" required></md-input>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="md-layout">
+                  <div class="md-layout-item md-layout md-layout-nowrap md-gutter md-alignment-center-right md-size-50 ml-auto mr-auto">
+                    <md-button class="myMR-5 md-warning" @click="onEditable" v-if="!editable">Edit</md-button>
+                    <md-button class="myMR-5" @click="onCancelEdit" v-if="editable">cancel</md-button>
+                    <md-button class="myMR-5 md-primary" @click="onCancelEdit" v-if="editable">submit</md-button>
                   </div>
                 </div>
               </template>
@@ -103,6 +134,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { Tabs } from "@/components";
 export default {
   components: {
@@ -130,7 +162,14 @@ export default {
         { image: require("@/assets/img/examples/clem-onojeghuo.jpg") },
         { image: require("@/assets/img/examples/olu-eletu.jpg") },
         { image: require("@/assets/img/examples/studio-1.jpg") }
-      ]
+      ],
+      editable: false,
+      username: '',
+      userProfile: {
+        firstname: '',
+        lastname: '',
+        email: '',
+      }
     };
   },
   props: {
@@ -140,14 +179,67 @@ export default {
     },
     img: {
       type: String,
-      default: require("@/assets/img/faces/christian.jpg")
+      default: require("@/assets/img/default/profile.jpg")
     }
   },
   computed: {
+    ...mapGetters([
+      'profile',
+    ]),
+    getprofileImg() {
+      if (this.profile.avata) {
+        return this.profile.avata;
+      } else {
+        return this.img;
+      }
+    },
     headerStyle() {
       return {
         backgroundImage: `url(${this.header})`
       };
+    }
+  },
+  mounted() {
+    if (this.profile) {
+      this.username = this.profile.username;
+      this.userProfile.firstname = this.profile.firstname;
+      this.userProfile.lastname = this.profile.lastname;
+      this.userProfile.email = this.profile.email;
+    }
+  },
+  methods: {
+    ...mapActions([
+      'updateProfile',
+    ]),
+    uploadAvata() {
+      this.$refs.avatafile.click()
+    },
+    onAvatapicker() {
+      console.log('www');
+      let self = this
+      const tmp_files = this.$refs.avatafile.files
+      console.log(tmp_files)
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var uril = e.target.result
+        console.log(uril);
+        self.updateProfile(uril).then((res) => {
+          console.log(res);
+        })
+        self.$refs.profileImg.src = uril
+      }
+      reader.readAsDataURL(tmp_files[0])
+    },
+    onEditable() {
+      this.editable = true;
+    },
+    onCancelEdit() {
+      this.editable = false;
+      if (this.profile) {
+        this.userProfile.firstname = this.profile.firstname;
+        this.userProfile.lastname = this.profile.lastname;
+        this.userProfile.email = this.profile.email;
+      }
     }
   }
 };
@@ -157,7 +249,43 @@ export default {
 .section {
   padding: 0;
 }
-
+.Grey-50{
+  color: #f7f7ff !important;
+}
+.avatar{
+  height: 160px;
+}
+.circleBar{
+  position: absolute;
+  top: -80px;
+  margin: auto;
+  width: 160px;
+  max-width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(240, 240, 240, 0);
+  overflow: hidden;
+  left: calc(50% - 80px);
+}
+.uploadAction {
+  background: rgba(61, 61, 61, 0.575);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+  align-content: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;;
+}
+.myMR-5 {
+  margin-right: 5px !important;
+}
+.hidden{
+  display: none;
+}
 .profile-tabs::v-deep {
   .md-card-tabs .md-list {
     justify-content: center;

@@ -63,7 +63,7 @@
                         data-toggle="dropdown"
                       >
                         <md-avatar class="md-small">
-                          <img :src="profilImg" alt="Avatar">
+                          <img :src="getprofileImg" alt="Avatar">
                         </md-avatar>
                         <p> {{ userName }}</p>
                       </md-button>
@@ -152,7 +152,7 @@ export default {
     },
     profilImg: {
       type: String,
-      default: require("@/assets/img/faces/avatar.jpg")
+      default: require("@/assets/img/default/profile.jpg")
     }
   },
 
@@ -168,8 +168,22 @@ export default {
       'isAuthenticated',
       'profile',
     ]),
+    getprofileImg() {
+      console.log('test state work');
+      console.log(this.profile);
+      if (this.profile.avata) {
+        return this.profile.avata;
+      } else {
+        return this.profilImg;
+      }
+    },
   },
-
+  watch: {
+    profile(val) {
+      console.log('getAllFilters changed');
+      console.log(val);
+    },
+  },
   methods: {
     ...mapActions([
       'logout'
