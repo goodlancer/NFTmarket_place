@@ -65,7 +65,7 @@
                         <md-avatar class="md-small">
                           <img :src="getprofileImg" alt="Avatar">
                         </md-avatar>
-                        <p> {{ userName }}</p>
+                        <p> {{ getUsername }}</p>
                       </md-button>
                       <ul
                         class="dropdown-menu dropdown-menu-right"
@@ -86,7 +86,7 @@
                         </li>
                         <li class="dropdown-divider"></li>
                         <li>
-                          <a href="#pablo" class="dropdown-item"
+                          <a href="#/generatenft/" class="dropdown-item"
                             >Create NFT</a
                           >
                         </li>
@@ -160,7 +160,6 @@ export default {
     return {
       extraNavClasses: "",
       toggledClass: false,
-      userName: '',
     };
   },
   computed: {
@@ -177,12 +176,9 @@ export default {
         return this.profilImg;
       }
     },
-  },
-  watch: {
-    profile(val) {
-      console.log('getAllFilters changed');
-      console.log(val);
-    },
+    getUsername(){
+      return this.profile.username;
+    }
   },
   methods: {
     ...mapActions([
@@ -243,6 +239,12 @@ export default {
     document.addEventListener("scroll", this.scrollListener);
     this.userName = this.profile.username;
     console.log(this.profile);
+    this.$root.$on('emitProfileImage', () => {
+      console.log(this.getprofileImg);
+    })
+    this.$root.$on('emitUsername', () => {
+      console.log(this.getUsername);
+    })
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);

@@ -14,6 +14,7 @@ const mutations = {
     }
     // Store data in localStorage
     console.log('updateer');
+    console.log(state.AppActiveUser);
     localStorage.setItem("userInfo", JSON.stringify(userInfo))
   },
   
@@ -26,7 +27,7 @@ const mutations = {
 
   LOGOUT(state){
     state.loggedState = false;
-    state.AppActiveUser = {};
+    state.AppActiveUser = null;
     localStorage.removeItem('userInfo');
     localStorage.removeItem('loggedState');
   }

@@ -1,12 +1,12 @@
 
 const userState = {
     avata: '',
-    token: '',
+    accessToken: '',
     email: '',
     username: '',
     firstname: '',
     lastname: '',
-    userId: '',
+    id: '',
 }
 
 const state = {

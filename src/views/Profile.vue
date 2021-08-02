@@ -32,7 +32,27 @@
                   </div>
                 </div>
                 <div class="name">
-                  <h3 class="title">{{username}} <md-icon>edit</md-icon></h3>
+                  <md-field class="md-layout-item md-size-50 mx-auto title" v-if="usernameEditable">
+                    <md-input
+                      class="usernameInput"
+                      v-model="username"
+                      type="text"
+                      aria-required="username"
+                      required
+                    ></md-input>
+                    <div class="mdIcon-bar" @click="saveUsername">
+                      <md-icon>
+                        check
+                      </md-icon>
+                    </div>
+                    <div class="mdIcon-bar" @click="cancelUsername">
+                      <md-icon>
+                        close
+                      </md-icon>
+                    </div>
+                  </md-field>
+                
+                  <h3 class="title" v-if="!usernameEditable">{{username}} <span @click="editUsername"><md-icon>edit</md-icon></span></h3>
                 </div>
               </div>
             </div>
@@ -48,14 +68,6 @@
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
                 <div class="md-layout">
-                  <!-- <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane1[0].image" class="rounded" />
-                    <img :src="tabPane1[1].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane1[3].image" class="rounded" />
-                    <img :src="tabPane1[2].image" class="rounded" />
-                  </div> -->
                   <div class="md-layout-item md-layout md-layout-nowrap md-gutter md-size-25 ml-auto">
                     <md-icon class="myMR-5">face</md-icon>
                     <md-field>
@@ -95,21 +107,35 @@
                   <div class="md-layout-item md-layout md-layout-nowrap md-gutter md-alignment-center-right md-size-50 ml-auto mr-auto">
                     <md-button class="myMR-5 md-warning" @click="onEditable" v-if="!editable">Edit</md-button>
                     <md-button class="myMR-5" @click="onCancelEdit" v-if="editable">cancel</md-button>
-                    <md-button class="myMR-5 md-primary" @click="onCancelEdit" v-if="editable">submit</md-button>
+                    <md-button class="myMR-5 md-primary" @click="updateProfileDetails" v-if="editable">submit</md-button>
                   </div>
                 </div>
               </template>
               <template slot="tab-pane-2">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane2[0].image" class="rounded" />
-                    <img :src="tabPane2[1].image" class="rounded" />
-                    <img :src="tabPane2[2].image" class="rounded" />
+                <div class="md-layout  md-gutter md-alignment-center">
+                  <div
+                    class="md-layout-item md-size-25 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+                    v-for='index in 9' :key='index'
+                  >
+                    <md-card>
+                      <md-card-media-cover>
+                        <md-card-media md-ratio="1:1">
+                          <img
+                            src="https://lh3.googleusercontent.com/RZ9t1F2tmKCcuyJxcUj111ORWrvz1fwEkglzGSgBaTCF0iac0HGa1EMq5Ts8wxJg9NVAyUGW3ZT9Mgg2btmeLOXNNA29eFsoOcvl=s288"
+                            alt="nftToken"
+                          />
+                        </md-card-media>
+                        <md-card-area>
+                          <md-card-header>
+                            <span class="md-title">Without text background {{index}}</span>
+                            <span class="md-subhead">I bet you can't read this</span>
+                          </md-card-header>
+
+                        </md-card-area>
+                      </md-card-media-cover>
+                    </md-card>
                   </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane2[3].image" class="rounded" />
-                    <img :src="tabPane2[4].image" class="rounded" />
-                  </div>
+                
                 </div>
               </template>
               <template slot="tab-pane-3">
@@ -165,6 +191,7 @@ export default {
       ],
       editable: false,
       username: '',
+      usernameEditable: false,
       userProfile: {
         firstname: '',
         lastname: '',
@@ -209,7 +236,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateProfile',
+      'updateProfileImage',
+      'updateProfileData',
+      'logout'
     ]),
     uploadAvata() {
       this.$refs.avatafile.click()
@@ -223,12 +252,27 @@ export default {
       reader.onload = function(e){
         var uril = e.target.result
         console.log(uril);
-        self.updateProfile(uril).then((res) => {
+        self.updateProfileImage(uril).then((res) => {
           console.log(res);
+          self.$root.$emit('emitProfileImage');
+        }).catch((err) => {
+          self.logout().then((res) => {
+            location.reload();
+          })
         })
         self.$refs.profileImg.src = uril
       }
       reader.readAsDataURL(tmp_files[0])
+    },
+    editUsername(){
+      this.usernameEditable = true;
+    },
+    cancelUsername() {
+      this.username = this.profile.username;
+      this.usernameEditable = false;
+    },
+    saveUsername() {
+      this.updateProfileDetails();
     },
     onEditable() {
       this.editable = true;
@@ -240,6 +284,24 @@ export default {
         this.userProfile.lastname = this.profile.lastname;
         this.userProfile.email = this.profile.email;
       }
+    },
+    updateProfileDetails() {
+      const profileDetails = {
+        email: this.userProfile.email,
+        firstname: this.userProfile.firstname,
+        lastname: this.userProfile.lastname,
+        username: this.username,
+      }
+      let self = this;
+      this.updateProfileData(profileDetails).then((res) => {
+        console.log(res);
+        self.editable = false;
+        self.usernameEditable = false;
+        self.$root.$emit('emitUsername');
+        console.log(this.profile);
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   }
 };
@@ -254,6 +316,17 @@ export default {
 }
 .avatar{
   height: 160px;
+}
+.usernameInput{
+  width: 100% !important;
+  text-align: center;
+  min-height: 32px !important;
+  line-height: 1.4em !important;
+  font-weight: 700 !important;
+  font-family: "Roboto Slab", "Times New Roman", serif !important;
+}
+.mdIcon-bar{
+  display: flex;
 }
 .circleBar{
   position: absolute;

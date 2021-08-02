@@ -10,7 +10,9 @@
     -webkit-text-fill-color: $black-color !important;
     appearance: none;
   }
-
+  .usernameInput{
+    font-size: 1.5625rem !important;
+  }
   & > .fas ~ .md-input,
   & > .fab ~ .md-input,
   & > .fa ~ .md-input {

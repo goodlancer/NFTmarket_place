@@ -50,15 +50,33 @@ const actions = {
 		})
 	},
 
-	updateProfile(context, payload){
+	updateProfileImage(context, payload){
 		return new Promise((resolve, reject) => {
 			var profileData = {
 				profileImg: payload
 			}
 
 			axios.post(`${apiUrl}api/user/profileImage`, profileData, { headers: authHeader() }).then((res) => {
-				resolve(res);
 				context.commit('UPDATE_USER_INFO', res.data);
+				resolve(res);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
+
+	updateProfileData(context, payload)	{
+		return new Promise((resolve, reject) => {
+			var profileData = {
+				email: payload.email,
+				firstname: payload.firstname,
+				lastname: payload.lastname,
+				username: payload.username,
+			}
+
+			axios.post(`${apiUrl}api/user/profileUpdate`, profileData, { headers: authHeader() }).then((res) => {
+				context.commit('UPDATE_USER_INFO', res.data);
+				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
 			})

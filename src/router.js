@@ -7,6 +7,7 @@ import Login from "./views/Login.vue";
 import ItemView from "./views/Itemview.vue";
 import Register from "./views/Register";
 import Profile from "./views/Profile.vue";
+import Gennft from "./views/Gennft.vue";
 // import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import HeadNavbar from "./layout/HeadNavbar.vue";
@@ -71,6 +72,15 @@ const router = new Router({
       path: "/profile",
       name: "profile",
       components: { default: Profile, header: HeadNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 100 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/generatenft",
+      name: "generate",
+      components: { default: Gennft, header: HeadNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 100 },
         footer: { backgroundColor: "black" }
