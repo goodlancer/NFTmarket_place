@@ -81,7 +81,49 @@ const actions = {
 			})
 		})
 	},
+	generateNFT(context, payload) {
+		return new Promise((resolve, reject) => {
+			var nftdata = {
+				datalink: payload.dataUrl,
+				title: payload.title,
+				detail: payload.detail,
+				price: payload.price,
+			}
 
+			axios.post(`${apiUrl}api/nftdata/create/`, nftdata, { headers: authHeader() }).then((res) => {
+				resolve(res);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
+	getNFTs() {
+		return new Promise((resolve, reject) => {
+			axios.get(`${apiUrl}api/nftdata/getall/`, { headers: authHeader() }).then((res) => {
+				resolve(res);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
+	getNFTById(context, payload) {
+		return new Promise((resolve, reject) => {
+			axios.get(`${apiUrl}api/nftdata/get/${payload.id}`, { headers: authHeader() }).then((res) => {
+				resolve(res);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
+	getNFTCollections() {
+		return new Promise((resolve, reject) => {
+			axios.get(`${apiUrl}api/nftdata/getbyUser`, { headers: authHeader() }).then((res) => {
+				resolve(res);
+			}).catch((err) => {
+				reject(new Error(err));
+			})
+		})
+	},
 	logout(context){
 		return new Promise((resolve) => {
 			context.commit('LOGOUT');

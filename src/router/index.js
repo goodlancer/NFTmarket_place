@@ -6,7 +6,9 @@ import MarketItem from '@/views/MarketItem.vue'
 import Login from '@/views/Login.vue'
 import Signup from '@/views/Signup.vue'
 import Gennft from '@/views/Gennft.vue'
-import Profile from '@/views/Profile.vue';
+import Profile from '@/views/Profile.vue'
+
+import store from '@/store/store'
 
 Vue.use(VueRouter)
 
@@ -20,11 +22,14 @@ const routes = [
     path: '/market',
     name: 'Market',
     component: Market,
+    meta: { requiresAuth: true }
   },
   {
     path: '/market/:itemId',
     name: 'Market Item View',
-    component: MarketItem
+    component: MarketItem,
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -39,12 +44,14 @@ const routes = [
   {
     path: '/generatenft',
     name: 'GenerateNFT',
-    component: Gennft
+    component: Gennft,
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/about',
@@ -57,6 +64,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isAuthenticated) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router

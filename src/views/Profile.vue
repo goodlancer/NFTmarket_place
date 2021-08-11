@@ -82,9 +82,13 @@
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
-                      <v-card-text>
-                        <p>This is third tab</p>
-                      </v-card-text>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-container>
+                            <Collections />
+                          </v-container>
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-tab-item>
                 </v-tabs>
@@ -102,10 +106,12 @@
 
 <script>
 import Account from '@/components/Account.vue'
+import Collections from '@/components/Collections.vue'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
-    Account
+    Account,
+    Collections
   },
   data: () => ({
   }),

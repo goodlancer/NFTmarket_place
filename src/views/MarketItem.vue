@@ -12,16 +12,18 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-card>
-                  <v-img 
-                    :src="`https://ipfs.io/ipfs/QmeGNQZYcoNX7TpFsCM8p3kzm9MpfyLwo3NHioLzGdBn2W?filename=Image%201.jpg`"
+                <v-card
+                  elevation="20"
+                >
+                  <v-img
+                    :src="nftDataById.imgUrl"
                     aspect-ratio="0.85"
                   />
                 </v-card>
                 <v-divider class="mt-5 mb-5"></v-divider>
                 <v-container>
                   <div class="text-start">
-                    <span class="text-h6">By User: </span><span class="text-h6">0x234s2dfdwe2</span>
+                    <span class="text-h6">By User: </span><span class="text-h6">{{nftDataById.userId}}</span>
                   </div>
                   <div class="text-start">
                     <span class="text-h6">Content Type: </span><span class="text-h6">Art</span>
@@ -31,15 +33,22 @@
 
               <v-col class="text-start" cols="12"  sm="8" justify="" align-self="start">
                 <div class="pa-5">
-                  <h2 class="mb-4 text-h3 font-weight-bold">Myworker</h2>
+                  <h2 class="mb-4 text-h3 font-weight-bold">{{nftDataById.title}}</h2>
                 </div>
                 <div class="pa-5">
-                  <p class="text-h6">Details sdfsegsesegsefsefsd s fwaefasdf awefad1111111111111</p>
+                  <v-textarea
+                    solo
+                    label="Description"
+                    readonly
+                    class="text-h6"
+                    :value="nftDataById.detail"
+                  >
+                  </v-textarea>
                 </div>
                 <div class="pa-5">
                   <h2 class="mb-4">price</h2> 
                   <div class="text-end font-weight-bold align-center justify-start d-flex subtitle-1">
-                    <Binancelogo class="mr-2" /> 555
+                    <Binancelogo class="mr-2" /> {{nftDataById.price}}
                   </div>
                 </div>
                 <div class="pa-5">
@@ -54,10 +63,38 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
   components: {
-    Binancelogo
-  }  
+    Binancelogo,
+  },
+  data: () => ({
+    nftDataById: {
+      id: '',
+      imgUrl: '',
+      title: '',
+      detail: '',
+      price: '',
+      userId: '',
+    }
+  }),
+  props: ['itemId'],
+  mounted() {
+    this.getNFTById({id: this.itemId}).then((res) => {
+      console.log(res);
+      this.nftDataById.id = res.data.data._id;
+      this.nftDataById.imgUrl = res.data.data.datalink;
+      this.nftDataById.detail = res.data.data.detail;
+      this.nftDataById.title = res.data.data.title;
+      this.nftDataById.price = res.data.data.price;
+      this.nftDataById.userId = res.data.data.byuser[0];
+    })
+  },
+  methods: {
+    ...mapActions([
+      'getNFTById',
+    ]),
+  }
 }
 </script>

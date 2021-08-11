@@ -96,10 +96,13 @@ export default {
     ]),
     loginSubmit(){
       console.log(this.$refs.logform.validate());
+      let self = this;
       if(this.$refs.logform.validate()){
         console.log(this.loginform);
         this.login(this.loginform).then((res) => {
           console.log(res);
+          console.log(self.$router);
+          self.$router.push('/market');
         })
       }
     }

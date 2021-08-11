@@ -55,13 +55,6 @@
         v-if="isXs"
       />
       <div v-else class="justify-center align-center d-flex">
-        <!-- <v-btn text v-for="([icon, text, link], i) in items"
-          :key="i" @click="gotoLink(link)">
-          <v-icon>{{icon}}</v-icon>
-          <span class="mr-2">
-            {{ text }}
-          </span>
-        </v-btn> -->
         <v-btn text @click="gotoLink('/market')">
           <v-icon>mdi-shopping-music</v-icon>
           <span class="mr-2">
@@ -80,26 +73,26 @@
             Faq
           </span>
         </v-btn>
-        <v-btn text @click="gotoLink('/login')">
+        <v-btn text  v-if="!isAuthenticated" @click="gotoLink('/login')">
           <v-icon>mdi-account-check</v-icon>
           <span class="mr-2">
             Login
           </span>
         </v-btn>
-        <v-btn text @click="gotoLink('/signup')">
+        <v-btn text  v-if="!isAuthenticated" @click="gotoLink('/signup')">
           <v-icon>mdi-account-plus</v-icon>
           <span class="mr-2">
             Register
           </span>
         </v-btn>
-        <v-menu offset-y>
+        <v-menu offset-y v-if="isAuthenticated">
           <template v-slot:activator="{on, attrs}">
             <div
               class="ma-5"
               v-bind="attrs"
               v-on="on"
             >
-              <v-avatar v-if="isAuthenticated" class="mr-2">
+              <v-avatar class="mr-2">
                 <v-img :src="getprofileImg"/>
               </v-avatar>
               <span>myTestwork</span>      

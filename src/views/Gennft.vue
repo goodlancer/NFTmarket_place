@@ -128,12 +128,15 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex';
+
+const ipfs = require('@/components/ifpsEngine.js');
 
 export default {
   components: {
   },
   data: () => ({
-    nftdata: '',
+    nftdata: null,
     nftformvalid: true,
     nftStateStr: 'Please upload your image',
     image: null,
@@ -150,15 +153,14 @@ export default {
     }
   }),
   methods: {
+    ...mapActions([
+      'generateNFT',
+    ]),
     dragover(event){
       event.preventDefault();
-      // event.currentTarget.classList.remove('bg-lightBlue-200')
-      // event.currentTarget.classList.add('bg-teal-200')
     },
     dragleave(event){
       event.preventDefault();
-      // event.currentTarget.classList.remove('bg-teal-200')
-      // event.currentTarget.classList.add('bg-lightBlue-200')
     },
     nftImagedrop(event){
       event.preventDefault();
@@ -173,27 +175,48 @@ export default {
       console.log('sss')
     },
     onnftfilechange(){
-      // alert('update worker');
       let self = this
       const nftfiles = this.$refs.nftfile.files
-      console.log(this.coverfiles)
-      // this.coverfileable = true
       var reader = new FileReader();
       reader.onload = function(e){
+        console.log(e.target);
         var uril = e.target.result
         self.nftStateStr = '';
-        // self.coverfileable = true
         self.$refs.nftdataImg.src = uril
       }
       reader.readAsDataURL(nftfiles[0])
+      var bufferReader = new FileReader();
+      bufferReader.readAsArrayBuffer(nftfiles[0])
+      bufferReader.onloadend = () => {
+        self.nftdata = Buffer(bufferReader.result);
+      }
+      
     },
     uploadImg(){
-      // alert('upload your image');
       this.$refs.nftfile.click();
     },
     submitNftData() {
+      console.log(ipfs);
+      let self = this;
       if(this.$refs.nftform.validate()){
         console.log()
+        let ipfsId;
+        console.log(this.nftdata)
+        // console.log(Buffer(this.nftData))
+        ipfs.default.add(this.nftdata).then((res) => {
+          ipfsId = res[0].hash;
+          console.log(ipfsId);
+          const addNFTdata = {
+            dataUrl: "https://ipfs.io/ipfs/" + ipfsId,
+            title: self.nftDataform.title,
+            detail: self.nftDataform.detail,
+            price: self.nftDataform.price,
+          }
+          self.generateNFT(addNFTdata).then((res) => {
+            console.log(res);
+            self.$router.push('/market')
+          })
+        })
       }
     }
   }

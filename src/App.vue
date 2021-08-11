@@ -43,7 +43,7 @@ export default {
 
   created() {
     const top = window.pageYOffset || 0;
-    if (top <= 60) {
+    if (top <= 20) {
       this.color = "transparent";
       this.flat = true;
     }
@@ -65,7 +65,7 @@ export default {
     onScroll(e) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || e.target.scrollTop || 0;
-      this.fab = top > 60;
+      this.fab = top > 20;
     },
     toTop() {
       this.$vuetify.goTo(0);

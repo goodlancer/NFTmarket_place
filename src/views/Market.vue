@@ -19,8 +19,8 @@
           <v-card class="mt-n16 pa-8">
             <v-row class="ma-0">
               <v-col
-                v-for="n in 12"
-                :key="n"
+                v-for="(item, index) in datas"
+                :key="index"
                 class="d-flex child-flex"
                 cols="3"
               >
@@ -28,7 +28,7 @@
                 <v-card
                   valid
                   width="100%"
-                  @click="nftItemView(n)"
+                  @click="nftItemView(item.id)"
                   :elevation="24">
                   <v-app-bar flat color="#fff">
                     <v-btn
@@ -39,7 +39,7 @@
                     </v-btn>
                   </v-app-bar>
                   <v-img
-                    :src="`https://ipfs.io/ipfs/QmeGNQZYcoNX7TpFsCM8p3kzm9MpfyLwo3NHioLzGdBn2W?filename=Image%201.jpg`"
+                    :src="item.dataUrl"
                     aspect-ratio="1"
                     class="grey lighten-2"
                   />
@@ -47,7 +47,7 @@
                     <v-row>
                       <v-col cols="6">
                         <div class="text-start font-weight-bold mb-2">
-                          <h4 class="text-h6 font-weight-bold">Nasame</h4>
+                          <h4 class="text-h6 font-weight-bold">{{item.title}}</h4>
                         </div>
                         <div class="text-start font-weight-bold">
                           <v-icon>mdi-link-variant</v-icon>
@@ -58,7 +58,7 @@
                           Price
                         </div>
                         <div class="text-end font-weight-bold align-center justify-end d-flex subtitle-1">
-                          <Binancelogo class="mr-2" /> 555
+                          <Binancelogo class="mr-2" /> {{item.price}}
                         </div>
                       </v-col>
                     </v-row>
@@ -76,15 +76,38 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
   components: {
     Binancelogo
   },
+  data: () => ({
+    datas: [],
+  }),
+  mounted() {
+    this.getAllDatas();
+  },
   methods: {
+    ...mapActions([
+      'getNFTs',
+    ]),
     nftItemView(id) {
       // alert(id);
       this.$router.push(`/market/${id}`)
+    },
+    getAllDatas(){
+      this.getNFTs().then((res) => {
+        console.log(res);
+        res.data.nftdata.map((item) => {
+          this.datas.push({
+            id: item._id,
+            dataUrl: item.datalink,
+            title: item.title,
+            price: item.price,
+          })
+        })
+      })
     }
   }
 }
