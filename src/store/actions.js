@@ -1,4 +1,3 @@
-import { LoginCard } from '../components';
 import authHeader from './authHeader';
 // const authHeader = require('./authHeader');
 const axios = require('axios')
