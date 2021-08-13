@@ -4,7 +4,9 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store/store'
 
+
 import Binancelogo from '@/components/Binancelogo.vue'
+
 
 Vue.config.productionTip = false
 

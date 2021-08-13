@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import navigation from "@/components/navbar/Navigation"
 export default {
   components: {
@@ -42,6 +43,9 @@ export default {
   }),
 
   created() {
+    this.getCrypto().then((res) => {
+      console.log(res);
+    })
     const top = window.pageYOffset || 0;
     if (top <= 20) {
       this.color = "transparent";
@@ -62,6 +66,9 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'getCrypto',
+    ]),
     onScroll(e) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || e.target.scrollTop || 0;

@@ -1,4 +1,6 @@
 import authHeader from './authHeader';
+
+import { getWeb3 } from '@/web3Server'
 // const authHeader = require('./authHeader');
 const axios = require('axios')
 const apiUrl = 'http://127.0.0.1:3000/'
@@ -26,6 +28,14 @@ const actions = {
 				reject(new Error(err))
 			})
 		})		
+	},
+
+	getCrypto() {
+		return new Promise( (resolve) => {
+			const wallets = getWeb3();
+			console.log(wallets);
+			resolve(wallets);
+		})
 	},
 
 	login(context, payload){

@@ -8,11 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@truffle/hdwallet-provider": "^1.4.3",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dotenv": "^10.0.0",
     "ipfs": "^0.56.1",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^51.0.1",
+    "truffle": "^5.4.6",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
     "vuetify": "^2.4.0",
