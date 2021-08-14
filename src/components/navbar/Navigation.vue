@@ -109,7 +109,7 @@
                    Ganerate NFT
               </v-list-item-title>
             </v-list-item>
-            <v-list-item link>
+            <v-list-item link @click="logouter">
               <v-list-item-title>
                    Logout
               </v-list-item-title>
@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data: () => ({
     drawer: null,
@@ -169,6 +169,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'logout',
+    ]),
     onResize() {
       this.isXs = window.innerWidth < 850;
     },
@@ -176,6 +179,10 @@ export default {
       console.log(link);
       
       this.$router.push(link);
+    },
+    logouter() {
+      this.logout();
+      window.location.reload();
     }
   },
   mounted() {

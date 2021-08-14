@@ -40,4 +40,4 @@ const getWallets = () =>
         })
     })
 
-export { getWallets, getWeb3 }
+export { getWallets, getWeb3, web3 }

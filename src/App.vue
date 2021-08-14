@@ -43,9 +43,9 @@ export default {
   }),
 
   created() {
-    this.getCrypto().then((res) => {
-      console.log(res);
-    })
+    // this.getCrypto().then((res) => {
+    //   console.log(res);
+    // })
     const top = window.pageYOffset || 0;
     if (top <= 20) {
       this.color = "transparent";

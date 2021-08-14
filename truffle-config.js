@@ -45,8 +45,10 @@ module.exports = {
     testnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://speedy-nodes-nyc.moralis.io/ebf31e1ffb8ea798d850d53f/bsc/testnet`),
       network_id: 97,
-      gas: 60000,
-      gasPrice: 600000000,
+      gas: 6700000,
+      gasPrice: 5000000000,
+      confirmations: 10,
+      timeoutBlocks: 200,
       skipDryRun: true
     },
     bsc: {

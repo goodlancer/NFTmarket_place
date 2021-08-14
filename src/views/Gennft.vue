@@ -129,6 +129,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import { getWeb3 } from '@/web3Server';
 
 const ipfs = require('@/components/ifpsEngine.js');
 
@@ -136,6 +137,12 @@ export default {
   components: {
   },
   data: () => ({
+    web3: null,
+    account: null,
+    networkId: null,
+    artNFTFactory: null,
+    artNFTmarket: null,
+    NFTgenContract: require('../../build/contracts/ArtNFT.json'),
     nftdata: null,
     nftformvalid: true,
     nftStateStr: 'Please upload your image',
@@ -152,9 +159,28 @@ export default {
       required: value => !!value || 'Required.'
     }
   }),
+  async mounted() {
+    this.web3 = await getWeb3();
+    this.networkId = await this.web3.eth.net.getId();
+    this.account = await this.web3.eth.getAccounts();
+    const jsonNFTFacotry = require('../../build/contracts/ArtNFTFactory.json');
+    const jsonNFTmarket = require('../../build/contracts/ArtNFTmarketplace.json');
+    const deployNetwork = jsonNFTFacotry.networks[this.networkId.toString()];
+    this.artNFTFactory = new this.web3.eth.Contract(
+      jsonNFTFacotry.abi,
+      deployNetwork && deployNetwork.address,
+    );
+    console.log("==my Art Factory==", this.artNFTFactory);
+    this.artNFTmarket = new this.web3.eth.Contract(
+      jsonNFTmarket.abi,
+      deployNetwork && deployNetwork.address,
+    );
+    console.log("==my Art artNFTmarket==", this.artNFTmarket);
+  },
   methods: {
     ...mapActions([
       'generateNFT',
+      'getCrypto'
     ]),
     dragover(event){
       event.preventDefault();
@@ -198,6 +224,7 @@ export default {
     submitNftData() {
       console.log(ipfs);
       let self = this;
+      
       if(this.$refs.nftform.validate()){
         console.log()
         let ipfsId;
@@ -206,6 +233,12 @@ export default {
         ipfs.default.add(this.nftdata).then((res) => {
           ipfsId = res[0].hash;
           console.log(ipfsId);
+          const art_price = self.web3.utils.toWei(self.nftDataform.price, 'ether');
+          self.artNFTFactory.methods.createNewArtNFT(self.nftDataform.title, self.nftDataform.detail, art_price, ipfsId)
+            .send({ from: self.account[0] })
+            .once('receipt', (receipt) => {
+              console.log('===receipt===', receipt);
+            })
           const addNFTdata = {
             dataUrl: "https://ipfs.io/ipfs/" + ipfsId,
             title: self.nftDataform.title,
