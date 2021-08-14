@@ -20,7 +20,7 @@
 require('dotenv').config();
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const mnemonic = process.env.MNEMONIC;
-const mnemonic = "art nft market place operator smart contract metadata and ipfs link gen";
+const mnemonic = "sphere gift lock calm sketch act fall uphold hub pair reduce refuse";
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -45,8 +45,8 @@ module.exports = {
     testnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://speedy-nodes-nyc.moralis.io/ebf31e1ffb8ea798d850d53f/bsc/testnet`),
       network_id: 97,
-      confirmations: 10,
-      timeoutBlocks: 200,
+      gas: 60000,
+      gasPrice: 600000000,
       skipDryRun: true
     },
     bsc: {
