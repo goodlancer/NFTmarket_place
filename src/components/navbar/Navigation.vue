@@ -55,7 +55,7 @@
         v-if="isXs"
       />
       <div v-else class="justify-center align-center d-flex">
-        <v-btn text @click="gotoLink('/market')">
+        <v-btn text link href="./market">
           <v-icon>mdi-shopping-music</v-icon>
           <span class="mr-2">
             marketplace
@@ -181,8 +181,10 @@ export default {
       this.$router.push(link);
     },
     logouter() {
-      this.logout();
-      window.location.reload();
+      this.logout().then((res) => {
+        console.log(res);
+        location.reload()
+      });
     }
   },
   mounted() {

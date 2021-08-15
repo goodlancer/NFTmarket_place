@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { getWeb3 } from '@/web3Server';
 import { mapActions } from 'vuex';
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
@@ -85,8 +86,31 @@ export default {
   data: () => ({
     datas: [],
   }),
-  mounted() {
-    this.getAllDatas();
+  async created() {
+    // this.getAllDatas();
+
+    this.web3 = await getWeb3();
+    console.log('first mounted', this.web3);
+    const networkId = await this.web3.eth.net.getId();
+    const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
+    const deployNet = jsonArtNFTData.networks[networkId.toString()];
+    const artNFTData = new this.web3.eth.Contract(
+      jsonArtNFTData.abi,
+      deployNet && deployNet.address,
+    );
+    console.log("== instance NFTData ==", artNFTData);
+    const allArts = await artNFTData.methods.getAllArts().call();
+    console.log("=== all arts contracts ===", allArts);
+    allArts.map((item) => {
+      this.datas.push({
+        id: item.artNFT,
+        dataUrl: "https://ipfs.io/ipfs/"+item.ipfsHashofArt,
+        title: item.artNFTname,
+        detail: item.artNFTSymbol,
+        price: this.web3.utils.fromWei(item.artPrice, 'ether'),
+      })
+    })
+    console.log('=== all Arts ===', this.datas);
   },
   methods: {
     ...mapActions([

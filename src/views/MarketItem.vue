@@ -22,12 +22,12 @@
                 </v-card>
                 <v-divider class="mt-5 mb-5"></v-divider>
                 <v-container>
-                  <div class="text-start">
+                  <v-row>
                     <span class="text-h6">By User: </span><span class="text-h6">{{nftDataById.userId}}</span>
-                  </div>
-                  <div class="text-start">
+                  </v-row>
+                  <v-row>
                     <span class="text-h6">Content Type: </span><span class="text-h6">Art</span>
-                  </div>
+                  </v-row>
                 </v-container>
               </v-col>
 
@@ -63,6 +63,7 @@
   </div>
 </template>
 <script>
+import { getWeb3 } from '@/web3Server';
 import { mapActions } from 'vuex';
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
@@ -70,6 +71,7 @@ export default {
     Binancelogo,
   },
   data: () => ({
+    web3: null,
     nftDataById: {
       id: '',
       imgUrl: '',
@@ -80,7 +82,7 @@ export default {
     }
   }),
   props: ['itemId'],
-  mounted() {
+  async mounted() {
     this.getNFTById({id: this.itemId}).then((res) => {
       console.log(res);
       this.nftDataById.id = res.data.data._id;
@@ -90,6 +92,25 @@ export default {
       this.nftDataById.price = res.data.data.price;
       this.nftDataById.userId = res.data.data.byuser[0];
     })
+
+    this.web3 = await getWeb3();
+    console.log('first mounted', this.web3);
+    const networkId = await this.web3.eth.net.getId();
+    const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
+    const deployNet = jsonArtNFTData.networks[networkId.toString()];
+    const artNFTData = new this.web3.eth.Contract(
+      jsonArtNFTData.abi,
+      deployNet && deployNet.address,
+    );
+    console.log("== instance NFTData ==", artNFTData);
+    const getArt = await artNFTData.methods.getArtByNFTAddress(this.itemId).call();
+    console.log("=== all arts contracts ===", getArt);
+    this.nftDataById.id = getArt.artNFT;
+    this.nftDataById.imgUrl = "https://ipfs.io/ipfs/"+getArt.ipfsHashofArt;
+    this.nftDataById.detail = getArt.artNFTSymbol;
+    this.nftDataById.title = getArt.artNFTname;
+    this.nftDataById.price = this.web3.utils.fromWei(getArt.artPrice, 'ether');
+    this.nftDataById.userId = getArt.ownerAddress;
   },
   methods: {
     ...mapActions([

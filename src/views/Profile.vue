@@ -75,9 +75,18 @@
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
-                      <v-card-text>
-                        <p>This is second tab</p>
-                      </v-card-text>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-container>
+                            <v-row>
+                              <v-text-field label="WalletId" outlined v-model="wallet.walletId" readonly></v-text-field>
+                            </v-row>
+                            <v-row>
+                              <v-text-field label="Ballence" outlined v-model="wallet.ballance" readonly></v-text-field>
+                            </v-row>
+                          </v-container>
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
@@ -85,7 +94,51 @@
                       <v-row>
                         <v-col cols="12">
                           <v-container>
-                            <Collections />
+                            <!-- <Collections /> -->
+                            <v-row>
+                              <v-col v-for="(item, index) in collections"
+                              :key="index" cols="4">
+                                <v-card
+                                  valid
+                                  width="100%"
+                                  :elevation="24">
+                                  <v-app-bar flat color="#fff">
+                                    <v-btn
+                                      color="red"
+                                      icon
+                                    >
+                                      <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                  </v-app-bar>
+                                  <v-img
+                                    :src="item.dataUrl"
+                                    aspect-ratio="1"
+                                    class="grey lighten-2"
+                                  />
+                                  <v-card-text>
+                                    <v-row>
+                                      <v-col cols="6">
+                                        <div class="text-start font-weight-bold mb-2">
+                                          <h4 class="text-h6 font-weight-bold">{{item.title}}</h4>
+                                        </div>
+                                        <div class="text-start font-weight-bold">
+                                          <v-icon>mdi-link-variant</v-icon>
+                                        </div>
+                                      </v-col>
+                                      <v-col cols="6">
+                                        <div class="text-end font-weight-bold mb-2">
+                                          Price
+                                        </div>
+                                        <div class="text-end font-weight-bold align-center justify-end d-flex subtitle-1">
+                                          <Binancelogo class="mr-2" /> {{item.price}}
+                                        </div>
+                                      </v-col>
+                                    </v-row>
+                                    
+                                  </v-card-text>
+                                </v-card>
+                              </v-col>
+                            </v-row>
                           </v-container>
                         </v-col>
                       </v-row>
@@ -105,15 +158,24 @@
 </template>
 
 <script>
+import { getWeb3 } from '@/web3Server';
 import Account from '@/components/Account.vue'
-import Collections from '@/components/Collections.vue'
+// import Collections from '@/components/Collections.vue'
 import { mapGetters, mapActions } from 'vuex'
+import Binancelogo from '@/components/Binancelogo.vue'
 export default {
   components: {
     Account,
-    Collections
+    Binancelogo,
+    // Collections,
   },
   data: () => ({
+    web3: null,
+    wallet: {
+      walletId: '',
+      ballance: ''
+    },
+    collections: []
   }),
   computed: {
     ...mapGetters([
@@ -123,8 +185,38 @@ export default {
       return this.profile.avata;
     }
   },
-  mounted() {
+  async mounted() {
     console.log('MYTEST', this.profile)
+    this.web3 = await getWeb3();
+    console.log(this.web3);
+    const networkId = await this.web3.eth.net.getId();
+    const tmpwallet = await this.web3.eth.getAccounts();
+    console.log('this is my logo file', this.wallet);
+    let tmpballent = await this.web3.eth.getBalance(tmpwallet[0]);
+    tmpballent = this.web3.utils.fromWei(tmpballent, 'ether')
+    console.log('ballance val', tmpballent);
+    this.wallet.walletId = tmpwallet[0];
+    this.wallet.ballance = tmpballent;
+
+    const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
+    const deployNet = jsonArtNFTData.networks[networkId.toString()];
+    const artNFTData = new this.web3.eth.Contract(
+      jsonArtNFTData.abi,
+      deployNet && deployNet.address,
+    );
+    console.log("== instance NFTData ==", artNFTData);
+    const allArts = await artNFTData.methods.getAllArts().call();
+    console.log("=== all arts contracts ===", allArts);
+    allArts.map((item) => {
+      this.collections.push({
+        id: item.artNFT,
+        dataUrl: "https://ipfs.io/ipfs/"+item.ipfsHashofArt,
+        title: item.artNFTname,
+        detail: item.artNFTSymbol,
+        price: this.web3.utils.fromWei(item.artPrice, 'ether'),
+      })
+    })
+    console.log('=== all Arts ===', this.collections);
   },
   created() {
     // this.$refs.profileImg.src = this.profile.avata;

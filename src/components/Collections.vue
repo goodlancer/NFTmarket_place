@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col v-for="(item, index) in datas"
-      :key="index" cols="3">
+      :key="index" cols="4">
         <v-card
           valid
           width="100%"

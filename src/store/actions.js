@@ -45,7 +45,6 @@ const actions = {
 				username: payload.username,
 				password: payload.password,
 			}
-
 			axios.post(`${apiUrl}api/auth/signin/`, loginData).then((res) => {
 				console.log(res);
 				context.commit('UPDATE_SIGNED', true);

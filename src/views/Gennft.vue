@@ -142,6 +142,7 @@ export default {
     networkId: null,
     artNFTFactory: null,
     artNFTmarket: null,
+    artNFTmarketAddress: null,
     NFTgenContract: require('../../build/contracts/ArtNFT.json'),
     nftdata: null,
     nftformvalid: true,
@@ -176,6 +177,8 @@ export default {
       deployNetwork && deployNetwork.address,
     );
     console.log("==my Art artNFTmarket==", this.artNFTmarket);
+    this.artNFTmarketAddress = deployNetwork.address;
+    console.log("== my artNFT market address ==", this.artNFTmarketAddress);
   },
   methods: {
     ...mapActions([
@@ -238,17 +241,33 @@ export default {
             .send({ from: self.account[0] })
             .once('receipt', (receipt) => {
               console.log('===receipt===', receipt);
+              const Art_NFT = receipt.events.ArtNFTCreated.returnValues.artNFT;
+              const jsonArtNFT = require("../../build/contracts/ArtNFT.json");
+              console.log(jsonArtNFT);
+              let artNFT = new self.web3.eth.Contract(jsonArtNFT.abi, Art_NFT);
+              console.log("== artNFT contract ==", artNFT);
+              const artId = 1;
+              artNFT.methods.ownerOf(artId).call().then(owner => console.log('ooooo= owner of artId 1 =oooo', owner));
+              artNFT.methods.approve(self.artNFTmarketAddress, artId).send({from: self.account[0]}).once('receipt', (receipt) => {
+                console.log("== nft approve ==", receipt);
+                this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price).send({ from: self.account[0] })
+                  .once('receipt', (receipt) => {
+                    console.log("== opentradeWhencaret ==", receipt);
+                    self.$router.push('/market')
+                  })
+              })
+
             })
-          const addNFTdata = {
-            dataUrl: "https://ipfs.io/ipfs/" + ipfsId,
-            title: self.nftDataform.title,
-            detail: self.nftDataform.detail,
-            price: self.nftDataform.price,
-          }
-          self.generateNFT(addNFTdata).then((res) => {
-            console.log(res);
-            self.$router.push('/market')
-          })
+          // const addNFTdata = {
+          //   dataUrl: "https://ipfs.io/ipfs/" + ipfsId,
+          //   title: self.nftDataform.title,
+          //   detail: self.nftDataform.detail,
+          //   price: self.nftDataform.price,
+          // }
+          // self.generateNFT(addNFTdata).then((res) => {
+          //   console.log(res);
+          //   self.$router.push('/market')
+          // })
         })
       }
     }
