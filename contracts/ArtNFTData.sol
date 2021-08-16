@@ -13,7 +13,6 @@ contract ArtNFTData is ArtNFTDataStorages {
         address[] memory _artAddresses,
         ArtNFT _artNFT,
         string memory _artNFTname,
-        string memory _artNFTdetail,
         string memory _artNFTSymbol,
         address _ownerAddress,
         uint _artPrice,
@@ -22,7 +21,6 @@ contract ArtNFTData is ArtNFTDataStorages {
         Art memory art = Art({
             artNFT: _artNFT,
             artNFTname: _artNFTname,
-            artNFTdetail: _artNFTdetail,
             artNFTSymbol: _artNFTSymbol,
             ownerAddress: _ownerAddress,
             artPrice: _artPrice,
