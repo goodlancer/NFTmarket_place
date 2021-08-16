@@ -129,7 +129,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import { initweb3 } from '@/web3Server';
+import { initweb3, getWeb3 } from '@/web3Server';
 
 const ipfs = require('@/components/ifpsEngine.js');
 
@@ -162,6 +162,10 @@ export default {
   }),
   async mounted() {
     this.web3 = initweb3;
+    if(typeof this.web3 === 'undefined'){
+      console.log('undefin log');
+      this.web3 = await getWeb3();
+    }
     this.networkId = await this.web3.eth.net.getId();
     this.account = await this.web3.eth.getAccounts();
     const jsonNFTFacotry = require('../../build/contracts/ArtNFTFactory.json');

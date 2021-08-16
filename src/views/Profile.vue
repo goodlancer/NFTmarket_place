@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { getinitweb3Web3 } from '@/web3Server';
+import { initweb3, getWeb3 } from '@/web3Server';
 import Account from '@/components/Account.vue'
 // import Collections from '@/components/Collections.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -188,6 +188,10 @@ export default {
   async mounted() {
     console.log('MYTEST', this.profile)
     this.web3 = initweb3;
+    if(typeof this.web3 === 'undefined'){
+      console.log('undefin log');
+      this.web3 = await getWeb3();
+    }
     console.log(this.web3);
     const networkId = await this.web3.eth.net.getId();
     const tmpwallet = await this.web3.eth.getAccounts();

@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { initweb3 } from '@/web3Server';
+import { initweb3, getWeb3 } from '@/web3Server';
 import { mapActions } from 'vuex'
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
@@ -94,10 +94,15 @@ export default {
   },
   async mounted() {
     // this.getAllDatas();
-
     this.web3 = initweb3;
+    if(typeof this.web3 === 'undefined'){
+      console.log('undefin log');
+      this.web3 = await getWeb3();
+    }
+    // this.web3 = await getWeb3();
     console.log('first mounted', this.web3);
     const networkId = await this.web3.eth.net.getId();
+    console.log('web3 network', networkId);
     const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
     const deployNet = jsonArtNFTData.networks[networkId.toString()];
     const artNFTData = new this.web3.eth.Contract(
