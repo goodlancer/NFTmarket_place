@@ -118,7 +118,8 @@ export default {
     ]),
     nftItemView(id) {
       // alert(id);
-      this.$router.push(`/market/${id}`)
+      // this.$router.push(`/market/${id}`)
+      location.href=`./market/${id}`
     },
     getAllDatas(){
       this.getNFTs().then((res) => {

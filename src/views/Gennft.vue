@@ -253,7 +253,8 @@ export default {
                 this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price).send({ from: self.account[0] })
                   .once('receipt', (receipt) => {
                     console.log("== opentradeWhencaret ==", receipt);
-                    self.$router.push('/market')
+                    // self.$router.push('/market')
+                    location.href="./market";
                   })
               })
 

@@ -7,6 +7,7 @@ contract ArtNFTFactoryEvents {
         address owner,
         ArtNFT artNFT,
         string nftname,
+        string nftdetail,
         string nftSymbol,
         uint artPrice,
         string ipfsHashOfArt

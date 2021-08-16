@@ -12,6 +12,7 @@ contract ArtNFT is ERC721Full {
     constructor(
         address owner,
         string memory _nftname,
+        string memory _nftdetail,
         string memory _nftSymbol,
         string memory _tokenURI,
         uint artPrice
