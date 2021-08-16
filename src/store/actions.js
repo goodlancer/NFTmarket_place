@@ -30,14 +30,6 @@ const actions = {
 		})		
 	},
 
-	getCrypto() {
-		return new Promise( (resolve) => {
-			const wallets = getWeb3();
-			console.log(wallets);
-			resolve(wallets);
-		})
-	},
-
 	login(context, payload){
 		return new Promise((resolve, reject) => {
 			console.log(payload)

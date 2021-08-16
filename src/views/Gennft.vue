@@ -129,7 +129,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import { getWeb3 } from '@/web3Server';
+import { initweb3 } from '@/web3Server';
 
 const ipfs = require('@/components/ifpsEngine.js');
 
@@ -161,7 +161,7 @@ export default {
     }
   }),
   async mounted() {
-    this.web3 = await getWeb3();
+    this.web3 = initweb3;
     this.networkId = await this.web3.eth.net.getId();
     this.account = await this.web3.eth.getAccounts();
     const jsonNFTFacotry = require('../../build/contracts/ArtNFTFactory.json');
@@ -182,8 +182,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'generateNFT',
-      'getCrypto'
+      'generateNFT'
     ]),
     dragover(event){
       event.preventDefault();
@@ -253,8 +252,8 @@ export default {
                 this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price).send({ from: self.account[0] })
                   .once('receipt', (receipt) => {
                     console.log("== opentradeWhencaret ==", receipt);
-                    // self.$router.push('/market')
-                    location.href="./market";
+                    self.$router.push('/market')
+                    // location.href="./market";
                   })
               })
 

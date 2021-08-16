@@ -19,6 +19,10 @@ const getters = {
           } else {
             return false;
           }
+    },
+
+    web3: state => {
+        return state.web3;
     }
 }
 export default getters

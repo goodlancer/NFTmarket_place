@@ -55,7 +55,7 @@
         v-if="isXs"
       />
       <div v-else class="justify-center align-center d-flex">
-        <v-btn text link href="./market">
+        <v-btn text  @click="gotoLink('/market')">
           <v-icon>mdi-shopping-music</v-icon>
           <span class="mr-2">
             marketplace

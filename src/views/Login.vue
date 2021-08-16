@@ -102,8 +102,8 @@ export default {
         this.login(this.loginform).then((res) => {
           console.log(res);
           console.log(self.$router);
-          // self.$router.push('/market');
-          location.href = "./market";
+          self.$router.push('/market');
+          // location.href = "./market";
         })
       }
     }

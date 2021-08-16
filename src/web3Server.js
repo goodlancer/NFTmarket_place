@@ -1,14 +1,51 @@
 import Web3 from "web3";
-let  web3;
-if(typeof web3 !== 'undefined') {
-   web3 = new Web3(web3.currentProvider)
+let  initweb3;
+if(typeof initweb3 !== 'undefined') {
+    initweb3 = new Web3(initweb3.currentProvider)
 }else{
-    web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+    initweb3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 }
+
+async function initweb3Gen () {
+    window.addEventListener("load",
+        async () => {
+            console.log('this is get web2 funciton');
+            if(window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    // resolve(web3);
+                    initweb3 = web3;
+                } catch (err) {
+                    // reject(err);
+                    console.log(err);
+                }
+            } else if (window.web3) {
+                const web3 = window.web3;
+                console.log("Injected web3 detected.");
+                // resolve(web3)
+                initweb3 = web3;
+            } else {
+                const provider = new Web3.providers.HttpProvider(
+                    'http://127.0.0.1:8545'
+                );
+                const web3 = new Web3(provider);
+                console.log("No web3 instace injected, using Infura/Local web3.");
+                // resolve(web3);
+                initweb3 = web3;
+            }
+        // }
+        })
+}
+
+initweb3Gen();
+console.log('myweb3', initweb3);
 
 const getWeb3 = () =>
     new Promise((resolve, reject) => {
-        window.addEventListener("load", async () => {
+        window.addEventListener("load",
+        async () => {
+            console.log('this is get web2 funciton');
             if(window.ethereum) {
                 const web3 = new Web3(window.ethereum);
                 try {
@@ -29,15 +66,16 @@ const getWeb3 = () =>
                 console.log("No web3 instace injected, using Infura/Local web3.");
                 resolve(web3);
             }
+        // }
         })
     })
 
 const getWallets = () => 
     new Promise((resolve, reject) => {
-        web3.eth.getAccounts((err, res) => {
+        initweb3.eth.getAccounts((err, res) => {
             if (!err) return resolve(res)
             reject(err)
         })
     })
 
-export { getWallets, getWeb3, web3 }
+export { getWallets, getWeb3, initweb3 }

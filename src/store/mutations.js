@@ -22,7 +22,10 @@ const mutations = {
     const logged = localStorage.getItem("loggedState") || payload;
     localStorage.setItem('loggedState', payload);
     state.loggedState = logged;
+  },
 
+  INITWEB3(state, payload) {
+    state.web3 = payload;
   },
 
   LOGOUT(state){

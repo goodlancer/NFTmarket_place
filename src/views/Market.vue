@@ -76,20 +76,26 @@
 </template>
 
 <script>
-import { getWeb3 } from '@/web3Server';
-import { mapActions } from 'vuex';
+import { initweb3 } from '@/web3Server';
+import { mapActions } from 'vuex'
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
   components: {
     Binancelogo
   },
   data: () => ({
+    web3: null,
     datas: [],
   }),
-  async created() {
+  computed: {
+    // ...mapGetters([
+    //   'web3',
+    // ]),
+  },
+  async mounted() {
     // this.getAllDatas();
 
-    this.web3 = await getWeb3();
+    this.web3 = initweb3;
     console.log('first mounted', this.web3);
     const networkId = await this.web3.eth.net.getId();
     const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
@@ -118,8 +124,8 @@ export default {
     ]),
     nftItemView(id) {
       // alert(id);
-      // this.$router.push(`/market/${id}`)
-      location.href=`./market/${id}`
+      this.$router.push(`/market/${id}`)
+      // location.href=`./market/${id}`
     },
     getAllDatas(){
       this.getNFTs().then((res) => {

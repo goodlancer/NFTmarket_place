@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import { getWeb3 } from '@/web3Server';
+import { initweb3 } from '@/web3Server';
 import { mapActions } from 'vuex';
 import Binancelogo from '@/components/Binancelogo.vue'
 export default {
@@ -97,7 +97,7 @@ export default {
     //   this.nftDataById.userId = res.data.data.byuser[0];
     // })
 
-    this.web3 = await getWeb3();
+    this.web3 = initweb3;
     console.log('first mounted', this.web3);
     const networkId = await this.web3.eth.net.getId();
     this.accounts = await this.web3.eth.getAccounts();
