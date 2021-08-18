@@ -4,7 +4,7 @@ import authHeader from './authHeader';
 // const authHeader = require('./authHeader');
 const axios = require('axios')
 // const apiUrl = 'http://127.0.0.1:3000/'
-const apiUrl = "http://localhost/"
+const apiUrl = "https://truhelix.com/"
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
@@ -13,7 +13,6 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			console.log(payload)
 			var signupUser = {
-				avata: '',
 				first: payload.firstname,
 				last: payload.lastname,
 				username: payload.username,
