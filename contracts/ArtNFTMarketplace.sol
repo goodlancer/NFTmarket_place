@@ -27,7 +27,7 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         uint buyAmount = art.artPrice;
 
         require(msg.value == buyAmount, "msg.value should be equal to the buyAmount");
-        seller.transfer(buyAmount);
+        seller.transfer(msg.value);
         address buyer = msg.sender;
         uint artId = 1;
         artNFT.approve(buyer, artId);

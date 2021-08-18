@@ -3,7 +3,8 @@ import authHeader from './authHeader';
 // import { getWeb3 } from '@/web3Server'
 // const authHeader = require('./authHeader');
 const axios = require('axios')
-const apiUrl = 'http://127.0.0.1:3000/'
+// const apiUrl = 'http://127.0.0.1:3000/'
+const apiUrl = "http://localhost/"
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
@@ -20,7 +21,7 @@ const actions = {
 				password: payload.password,
 			}
 
-			axios.post(`${apiUrl}api/auth/signup/`, signupUser).then((res) => {
+			axios.post(`${apiUrl}auth/signup.php`, signupUser).then((res) => {
 				console.log(res);
 				resolve(res);
 			}).catch((err) => {
@@ -37,7 +38,7 @@ const actions = {
 				username: payload.username,
 				password: payload.password,
 			}
-			axios.post(`${apiUrl}api/auth/signin/`, loginData).then((res) => {
+			axios.post(`${apiUrl}auth/signin.php`, loginData).then((res) => {
 				console.log(res);
 				context.commit('UPDATE_SIGNED', true);
 				context.commit('UPDATE_USER_INFO', res.data);

@@ -85,7 +85,7 @@
             Register
           </span>
         </v-btn>
-        <v-menu offset-y v-if="isAuthenticated">
+        <v-menu offset-y v-if="!isAuthenticated">
           <template v-slot:activator="{on, attrs}">
             <div
               class="ma-5"
@@ -93,23 +93,24 @@
               v-on="on"
             >
               <v-avatar class="mr-2">
-                <v-img :src="getprofileImg"/>
+                <!-- <v-img :src="getprofileImg"/> -->
+                <v-img src="@/assets/logo.png"/>
               </v-avatar>
               <span>myTestwork</span>      
             </div>
           </template>
           <v-list class="text-start">
-            <v-list-item link href="/profile">
+            <v-list-item @click="gotoLink('/profile')">
               <v-list-item-title>
                    Profile
               </v-list-item-title>
             </v-list-item>
-            <v-list-item link href="/generatenft">
+            <v-list-item @click="gotoLink('/generatenft')">
               <v-list-item-title>
                    Ganerate NFT
               </v-list-item-title>
             </v-list-item>
-            <v-list-item link @click="logouter">
+            <v-list-item @click="logouter">
               <v-list-item-title>
                    Logout
               </v-list-item-title>
@@ -183,7 +184,7 @@ export default {
     logouter() {
       this.logout().then((res) => {
         console.log(res);
-        location.reload()
+        // location.reload()
       });
     }
   },

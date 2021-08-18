@@ -15,7 +15,6 @@
     "ipfs": "^0.56.1",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^51.0.1",
-    "truffle": "^5.4.6",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
     "vuetify": "^2.4.0",

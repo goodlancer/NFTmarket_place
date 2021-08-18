@@ -74,6 +74,7 @@ export default {
     web3: null,
     jsonArtNFT: {},
     artNFTData: null,
+    getArt: null,
     accounts: [],
     artNFTmarketplace: null,
     nftDataById: {
@@ -120,14 +121,14 @@ export default {
       deployNet && deployNet.address,
     );
     console.log("== instance NFTData ==", this.artNFTData);
-    const getArt = await this.artNFTData.methods.getArtByNFTAddress(this.itemId).call();
-    console.log("=== all arts contracts ===", getArt);
-    this.nftDataById.id = getArt.artNFT;
-    this.nftDataById.imgUrl = "https://ipfs.io/ipfs/"+getArt.ipfsHashofArt;
-    this.nftDataById.detail = getArt.artNFTSymbol;
-    this.nftDataById.title = getArt.artNFTname;
-    this.nftDataById.price = this.web3.utils.fromWei(getArt.artPrice, 'ether');
-    this.nftDataById.userId = getArt.ownerAddress;
+    this.getArt = await this.artNFTData.methods.getArtByNFTAddress(this.itemId).call();
+    console.log("=== all arts contracts ===", this.getArt);
+    this.nftDataById.id = this.getArt.artNFT;
+    this.nftDataById.imgUrl = "https://ipfs.io/ipfs/"+this.getArt.ipfsHashofArt;
+    this.nftDataById.detail = this.getArt.artNFTSymbol;
+    this.nftDataById.title = this.getArt.artNFTname;
+    this.nftDataById.price = this.web3.utils.fromWei(this.getArt.artPrice, 'ether');
+    this.nftDataById.userId = this.getArt.ownerAddress;
   },
   methods: {
     ...mapActions([
@@ -137,14 +138,15 @@ export default {
       console.log('this gen art');
       
       // const artId = 1;
-      // const artNFT = new this.web3.eth.Contract(this.jsonArtNFT.abi, this.itemId);
-      // console.log("== bue artNFT ==", artNFT);
+      const artNFT = new this.web3.eth.Contract(this.jsonArtNFT.abi, this.itemId);
+      console.log("== bue artNFT ==", artNFT);
       // const owner = await artNFT.methods.ownerOf(photoId).call();
 
       const art = await this.artNFTData.methods.getArtByNFTAddress(this.itemId).call();
       const buyAmount = await art.artPrice;
       // const txReceipt = await 
-      this.artNFTmarketplace.methods.buyPhotoNFT(this.itemId).send({ from: this.accounts[0], value: buyAmount }).once('receipt', (receipt) => {
+      console.log("this is my art", art.artNFT);
+      this.artNFTmarketplace.methods.buyPhotoNFT(art.artNFT).send({ from: this.accounts[0], value: buyAmount }).once('receipt', (receipt) => {
         console.log("==response of buyArtNFT===", receipt);  
       });
       
