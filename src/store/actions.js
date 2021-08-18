@@ -56,7 +56,7 @@ const actions = {
 				profileImg: payload
 			}
 
-			axios.post(`${apiUrl}api/user/profileImage`, profileData, { headers: authHeader() }).then((res) => {
+			axios.post(`${apiUrl}api/user/profileImage`, profileData).then((res) => {
 				context.commit('UPDATE_USER_INFO', res.data);
 				resolve(res);
 			}).catch((err) => {
@@ -74,7 +74,7 @@ const actions = {
 				username: payload.username,
 			}
 
-			axios.post(`${apiUrl}api/user/profileUpdate`, profileData, { headers: authHeader() }).then((res) => {
+			axios.post(`${apiUrl}api/user/profileUpdate`, profileData).then((res) => {
 				context.commit('UPDATE_USER_INFO', res.data);
 				resolve(res);
 			}).catch((err) => {
@@ -91,7 +91,7 @@ const actions = {
 				price: payload.price,
 			}
 
-			axios.post(`${apiUrl}api/nftdata/create/`, nftdata, { headers: authHeader() }).then((res) => {
+			axios.post(`${apiUrl}api/nftdata/create/`, nftdata).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -100,7 +100,7 @@ const actions = {
 	},
 	getNFTs() {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}api/nftdata/getall/`, { headers: authHeader() }).then((res) => {
+			axios.get(`${apiUrl}api/nftdata/getall/`).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -109,7 +109,7 @@ const actions = {
 	},
 	getNFTById(context, payload) {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}api/nftdata/get/${payload.id}`, { headers: authHeader() }).then((res) => {
+			axios.get(`${apiUrl}api/nftdata/get/${payload.id}`).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -118,7 +118,7 @@ const actions = {
 	},
 	getNFTCollections() {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}api/nftdata/getbyUser`, { headers: authHeader() }).then((res) => {
+			axios.get(`${apiUrl}api/nftdata/getbyUser`).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));

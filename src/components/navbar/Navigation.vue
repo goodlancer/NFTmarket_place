@@ -85,7 +85,7 @@
             Register
           </span>
         </v-btn>
-        <v-menu offset-y v-if="!isAuthenticated">
+        <v-menu offset-y v-if="isAuthenticated">
           <template v-slot:activator="{on, attrs}">
             <div
               class="ma-5"

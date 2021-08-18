@@ -13,6 +13,7 @@ const mutations = {
       }
     }
     // Store data in localStorage
+    userInfo['genTokenDate'] = new Date();
     console.log('updateer');
     console.log(state.AppActiveUser);
     localStorage.setItem("userInfo", JSON.stringify(userInfo))

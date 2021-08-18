@@ -7,7 +7,7 @@ const getters = {
     isAuthenticated: state => {
         const user = (state.AppActiveUser.id != "")? state.AppActiveUser : JSON.parse(localStorage.getItem("userInfo"));
         
-        if (user && user.accessToken) {
+        if (user) {
             var hours = Math.abs(new Date() - new Date(user.genTokenDate)) / 36e5;
             console.log('expire hours', hours);
             if(hours < 12){

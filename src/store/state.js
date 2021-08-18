@@ -1,7 +1,5 @@
 
 const userState = {
-    avata: '',
-    accessToken: '',
     genTokenDate: '',
     email: '',
     username: '',
