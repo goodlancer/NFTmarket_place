@@ -1,4 +1,4 @@
-import authHeader from './authHeader';
+// import authHeader from './authHeader';
 
 // import { getWeb3 } from '@/web3Server'
 // const authHeader = require('./authHeader');

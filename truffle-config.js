@@ -43,11 +43,12 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://speedy-nodes-nyc.moralis.io/ebf31e1ffb8ea798d850d53f/bsc/testnet`),
+      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545/`),
       network_id: 97,
       gas: 5500000,
-      confirmations: 10,
-      timeoutBlocks: 50000,
+      networkCheckTimeout: 10000000,
+      confirmations: 2,    
+      timeoutBlocks: 200,  
       skipDryRun: true
     },
     bsc: {

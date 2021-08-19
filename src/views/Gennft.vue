@@ -245,6 +245,7 @@ export default {
             .once('receipt', (receipt) => {
               console.log('===receipt===', receipt);
               const Art_NFT = receipt.events.ArtNFTCreated.returnValues.artNFT;
+              console.log("l=== receipt ARTNFT ===l", Art_NFT);
               const jsonArtNFT = require("../../build/contracts/ArtNFT.json");
               console.log(jsonArtNFT);
               let artNFT = new self.web3.eth.Contract(jsonArtNFT.abi, Art_NFT);
@@ -253,13 +254,14 @@ export default {
               artNFT.methods.ownerOf(artId).call().then(owner => console.log('ooooo= owner of artId 1 =oooo', owner));
               artNFT.methods.approve(self.artNFTmarketAddress, artId).send({from: self.account[0]}).once('receipt', (receipt) => {
                 console.log("== nft approve ==", receipt);
-                self.$router.push('/market')
-                // this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price).send({ from: self.account[0] })
-                //   .once('receipt', (receipt) => {
-                //     console.log("== opentradeWhencaret ==", receipt);
-                //     self.$router.push('/market')
-                //     // location.href="./market";
-                //   })
+                // self.$router.push('/market')
+                this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price)
+                .send({ from: self.account[0] })
+                  .once('receipt', (receipt) => {
+                    console.log("== opentradeWhencaret ==", receipt);
+                    self.$router.push('/market')
+                    // location.href="./market";
+                  })
               })
 
             })
