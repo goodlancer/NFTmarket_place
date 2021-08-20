@@ -26,17 +26,18 @@ contract ArtNFTTradable {
     }
 
     function openTradeWhenCreateNewPhotoNFT(ArtNFT artNFT, uint256 _artId, uint256 _artPrice) public {
+        // console.log('trading', address(this));
         artNFT.transferFrom(msg.sender, address(this), _artId);
 
-        // tradeCounter += 1;
-        // trades[tradeCounter] =Trade({
-        //     seller: msg.sender,
-        //     artId: _artId,
-        //     artPrice: _artPrice,
-        //     status: "open"
-        // });
+        tradeCounter += 1;
+        trades[tradeCounter] =Trade({
+            seller: msg.sender,
+            artId: _artId,
+            artPrice: _artPrice,
+            status: "open"
+        });
 
-        emit TradeStatusChange(tradeCounter -1, "Open");
+        emit TradeStatusChange(tradeCounter, "Open");
     }
 
     function openTrade(ArtNFT artNFT, uint256 _artID) public {

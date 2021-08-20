@@ -12,14 +12,19 @@ const actions = {
 	signup(context, payload){
 		return new Promise((resolve, reject) => {
 			console.log(payload)
-			var signupUser = {
-				first: payload.firstname,
-				last: payload.lastname,
-				username: payload.username,
-				email: payload.email,
-				password: payload.password,
-			}
-
+			// var signupUser = {
+			// 	firstname: payload.firstname,
+			// 	lastname: payload.lastname,
+			// 	username: payload.username,
+			// 	email: payload.email,
+			// 	password: payload.password,
+			// }
+			var signupUser = new FormData();
+			signupUser.append('firstname', payload.firstname);
+			signupUser.append('lastname', payload.lastname);
+			signupUser.append('username', payload.username);
+			signupUser.append('email', payload.email);
+			signupUser.append('password', payload.password);
 			axios.post(`${apiUrl}auth/signup.php`, signupUser).then((res) => {
 				console.log(res);
 				resolve(res);
@@ -33,14 +38,17 @@ const actions = {
 	login(context, payload){
 		return new Promise((resolve, reject) => {
 			console.log(payload)
-			var loginData = {
-				username: payload.username,
-				password: payload.password,
-			}
+			// var loginData = {
+			// 	username: payload.username,
+			// 	password: payload.password,
+			// }
+			var loginData = new FormData();
+			loginData.append('username', payload.username);
+			loginData.append('password', payload.password);
 			axios.post(`${apiUrl}auth/signin.php`, loginData).then((res) => {
 				console.log(res);
 				context.commit('UPDATE_SIGNED', true);
-				context.commit('UPDATE_USER_INFO', res.data);
+				context.commit('UPDATE_USER_INFO', res.data.data);
 				axios.defaults.headers.common['x-access-token'] = res.data.accessToken
 				resolve(res);
 			}).catch((err) => {

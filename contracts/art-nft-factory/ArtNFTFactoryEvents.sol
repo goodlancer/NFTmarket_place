@@ -8,6 +8,7 @@ contract ArtNFTFactoryEvents {
         ArtNFT artNFT,
         string nftname,
         string nftSymbol,
+        string nftDetail,
         uint artPrice,
         string ipfsHashOfArt
     );

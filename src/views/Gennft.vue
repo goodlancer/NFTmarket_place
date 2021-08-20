@@ -139,6 +139,7 @@ export default {
   data: () => ({
     web3: null,
     account: null,
+    balance: null,
     networkId: null,
     artNFTFactory: null,
     artNFTmarket: null,
@@ -168,6 +169,9 @@ export default {
     }
     this.networkId = await this.web3.eth.net.getId();
     this.account = await this.web3.eth.getAccounts();
+    const tmpbalance = await this.web3.eth.getBalance(this.account[0]);
+    this.balance = this.web3.utils.fromWei(tmpbalance, 'ether');
+    console.log( "wallet ballence", this.balance);
     const jsonNFTFacotry = require('../../build/contracts/ArtNFTFactory.json');
     const jsonNFTmarket = require('../../build/contracts/ArtNFTmarketplace.json');
     const deployNetwork = jsonNFTFacotry.networks[this.networkId.toString()];
@@ -240,7 +244,8 @@ export default {
           ipfsId = res[0].hash;
           console.log(ipfsId);
           const art_price = self.web3.utils.toWei(self.nftDataform.price, 'ether');
-          self.artNFTFactory.methods.createNewArtNFT(self.nftDataform.title, self.nftDataform.detail, art_price, ipfsId)
+          const artsymbol = "truhelix";
+          self.artNFTFactory.methods.createNewArtNFT(self.nftDataform.title, self.nftDataform.detail, artsymbol, art_price, ipfsId)
             .send({ from: self.account[0] })
             .once('receipt', (receipt) => {
               console.log('===receipt===', receipt);
@@ -254,14 +259,14 @@ export default {
               artNFT.methods.ownerOf(artId).call().then(owner => console.log('ooooo= owner of artId 1 =oooo', owner));
               artNFT.methods.approve(self.artNFTmarketAddress, artId).send({from: self.account[0]}).once('receipt', (receipt) => {
                 console.log("== nft approve ==", receipt);
-                // self.$router.push('/market')
-                this.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price)
-                .send({ from: self.account[0] })
-                  .once('receipt', (receipt) => {
-                    console.log("== opentradeWhencaret ==", receipt);
-                    self.$router.push('/market')
-                    // location.href="./market";
-                  })
+                self.$router.push('/market')
+                // self.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price)
+                // .send({ from: self.account[0] })
+                //   .once('receipt', (receipt) => {
+                //     console.log("== opentradeWhencaret ==", receipt);
+                //     self.$router.push('/market')
+                //     // location.href="./market";
+                //   })
               })
 
             })

@@ -30,10 +30,10 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         seller.transfer(msg.value);
         address buyer = msg.sender;
         uint artId = 1;
-        artNFT.approve(buyer, artId);
+        // artNFT.approve(buyer, artId);
         address ownerBeforeOwnershipTransferred = artNFT.ownerOf(artId);
 
-        transferOwnershipOfArtNFT(artNFT, artId, buyer);
+        // transferOwnershipOfArtNFT(artNFT, artId, buyer);
         artNFTData.updateOwnerOfArtNFT(artNFT, buyer);
         artNFTData.updateStatus(artNFT, "Cancelled");
 

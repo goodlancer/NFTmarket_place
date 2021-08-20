@@ -24,16 +24,16 @@ contract ArtNFTFactory is ArtNFTFactoryStorages {
         ART_NFT_MARKETPLACE = address(artNFTmarketplace);
     }
 
-    function createNewArtNFT(string memory nftName, string memory nftSymbol, uint artPrice, string memory ipfsHashOfArt) public returns (bool) {
+    function createNewArtNFT(string memory nftName, string memory nftDetail, string memory nftSymbol, uint artPrice, string memory ipfsHashOfArt) public returns (bool) {
         address owner = msg.sender;
         string memory tokenURI = getTokenURL(ipfsHashOfArt);
-        ArtNFT artNFT = new ArtNFT(owner, nftName, nftSymbol, tokenURI, artPrice);
+        ArtNFT artNFT = new ArtNFT(owner, nftName, nftSymbol, nftDetail, tokenURI, artPrice);
         artAddresses.push(address(artNFT));
 
-        artNFTdata.saveMetadataofArtNFT(artAddresses, artNFT, nftName, nftSymbol, msg.sender, artPrice, ipfsHashOfArt);
+        artNFTdata.saveMetadataofArtNFT(artAddresses, artNFT, nftName, nftSymbol, nftDetail, msg.sender, artPrice, ipfsHashOfArt);
         artNFTdata.updateStatus(artNFT, "Open");
 
-        emit ArtNFTCreated(msg.sender, artNFT, nftName, nftSymbol, artPrice, ipfsHashOfArt);
+        emit ArtNFTCreated(msg.sender, artNFT, nftName, nftSymbol, nftDetail, artPrice, ipfsHashOfArt);
     }
 
     function baseTokenURI() public pure returns (string memory) {

@@ -22,38 +22,57 @@
                 </v-card>
                 <v-divider class="mt-5 mb-5"></v-divider>
                 <v-container>
-                  <v-row>
-                    <span class="text-h6">By User: </span><span class="text-h6">{{nftDataById.userId}}</span>
-                  </v-row>
-                  <v-row>
-                    <span class="text-h6">Content Type: </span><span class="text-h6">Art</span>
-                  </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <Binancelogo class="mr-2" />  <span class="text-h4 font-weight-bold">{{nftDataById.price}}</span> <span class="text-h5">(BNB)</span>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="8">
+                        <v-btn v-if="!nftOwner" color="primary" block @click="buyItem()"><v-icon class="mr-3">mdi-wallet</v-icon>Buy Bow</v-btn>
+                      </v-col>
+                    </v-row>
                 </v-container>
               </v-col>
 
               <v-col class="text-start" cols="12"  sm="8" justify="" align-self="start">
-                <div class="pa-5">
-                  <h2 class="mb-4 text-h3 font-weight-bold">{{nftDataById.title}}</h2>
-                </div>
-                <div class="pa-5">
-                  <v-textarea
-                    solo
-                    label="Description"
-                    readonly
-                    class="text-h6"
-                    :value="nftDataById.detail"
-                  >
-                  </v-textarea>
-                </div>
-                <div class="pa-5">
-                  <h2 class="mb-4">price</h2> 
-                  <div class="text-end font-weight-bold align-center justify-start d-flex subtitle-1">
-                    <Binancelogo class="mr-2" /> {{nftDataById.price}}
-                  </div>
-                </div>
-                <div class="pa-5">
-                  <v-btn color="primary" @click="buyItem()"><v-icon class="mr-3">mdi-wallet</v-icon>Buy Bow</v-btn>
-                </div>
+                <v-row class="pa-5">
+                  <v-col cols="12">
+                      <h2 class="mb-4 text-h3 font-weight-bold">{{nftDataById.title}}</h2>
+                  </v-col>
+                  <v-col cols="12">
+                      <v-textarea
+                        outlined
+                        label="Description"
+                        readonly
+                        class="text-h6"
+                        :value="nftDataById.detail"
+                        elevation="12"
+                      >
+                      </v-textarea>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-card class="pa-4" elevation="12">
+                      <v-row>
+                        <v-col cols="12">
+                          <span class="text-h6">Onwer :</span> <span class="text-h5 font-weight-bold">{{nftDataById.userId}}</span>
+                        </v-col>
+                        <v-col cols="12">
+                          <span class="text-h6">Type :</span> <span class="text-h5 font-weight-bold">Art</span>
+                        </v-col>
+                      </v-row>
+                    </v-card>
+                  </v-col>
+                  <!-- <v-col cols="12">
+                    <v-card class="pa-4">
+                      <v-row>
+                        <v-col cols="12">
+                          <span class="text-h6">Current price</span>
+                        </v-col>
+                        <v-col cols="12">
+                        </v-col>
+                      </v-row>  
+                    </v-card>
+                  </v-col> -->
+                </v-row>
               </v-col>
             </v-row>
           </v-container>
@@ -84,9 +103,11 @@ export default {
       detail: '',
       price: '',
       userId: '',
-    }
+    },
+    nftOwner: false,
   }),
   props: ['itemId'],
+  
   async mounted() {
     // this.getNFTById({id: this.itemId}).then((res) => {
     //   console.log(res);
@@ -125,10 +146,13 @@ export default {
     console.log("=== all arts contracts ===", this.getArt);
     this.nftDataById.id = this.getArt.artNFT;
     this.nftDataById.imgUrl = "https://ipfs.io/ipfs/"+this.getArt.ipfsHashofArt;
-    this.nftDataById.detail = this.getArt.artNFTSymbol;
+    this.nftDataById.detail = this.getArt.artNFTDetail;
     this.nftDataById.title = this.getArt.artNFTname;
     this.nftDataById.price = this.web3.utils.fromWei(this.getArt.artPrice, 'ether');
     this.nftDataById.userId = this.getArt.ownerAddress;
+    if(this.nftDataById.userId == this.accounts[0]){
+      this.nftOwner = true;
+    }
   },
   methods: {
     ...mapActions([

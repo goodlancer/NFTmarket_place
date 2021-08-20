@@ -14,6 +14,7 @@ contract ArtNFTData is ArtNFTDataStorages {
         ArtNFT _artNFT,
         string memory _artNFTname,
         string memory _artNFTSymbol,
+        string memory _artNFTDetail,
         address _ownerAddress,
         uint _artPrice,
         string memory _ipfsHashOfArt
@@ -22,6 +23,7 @@ contract ArtNFTData is ArtNFTDataStorages {
             artNFT: _artNFT,
             artNFTname: _artNFTname,
             artNFTSymbol: _artNFTSymbol,
+            artNFTDetail: _artNFTDetail,
             ownerAddress: _ownerAddress,
             artPrice: _artPrice,
             ipfsHashofArt: _ipfsHashOfArt,
