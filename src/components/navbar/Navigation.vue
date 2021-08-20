@@ -96,7 +96,7 @@
                 <!-- <v-img :src="getprofileImg"/> -->
                 <v-img src="@/assets/logo.png"/>
               </v-avatar>
-              <span>myTestwork</span>      
+              <span>{{profile.username}}</span>      
             </div>
           </template>
           <v-list class="text-start">
@@ -184,7 +184,7 @@ export default {
     logouter() {
       this.logout().then((res) => {
         console.log(res);
-        // location.reload()
+        location.href="./"
       });
     }
   },
