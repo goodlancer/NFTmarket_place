@@ -43,6 +43,8 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
     
     function ArtNFTUpdate(ArtNFT _artNFT, string title, string detail) public returns (bool) {
         ArtNFT artNFT = _artNFT;
+        ArtNFTData.Art memory art = artNFTData.getArtByNFTAddress(artNFT);
+        artNFTData.UpdateArtdata(artNFT, title, detail);
         uInt artId = 1;
         emit ArtUpdated(artNFT, artId);
     }
