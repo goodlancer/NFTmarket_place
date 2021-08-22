@@ -28,6 +28,17 @@
                       </v-col>
                       <v-col cols="12" sm="6" md="8">
                         <v-btn v-if="!nftOwner" color="primary" block @click="buyItem()"><v-icon class="mr-3">mdi-wallet</v-icon>Buy Bow</v-btn>
+                        <v-btn v-else color="primary" block :disabled="editing" @click="editableData()">Edit</v-btn>  
+                      </v-col>
+                      <v-col cols="12" sm="12" md="12" v-if="editing">
+                          <v-row>
+                            <v-col cols="6">
+                              <v-btn block color="primary" @click="saveEditedData">Save</v-btn>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-btn block color="warring" @click="cancelEdit">Cancel</v-btn>
+                            </v-col>
+                          </v-row>
                       </v-col>
                     </v-row>
                 </v-container>
@@ -36,14 +47,24 @@
               <v-col class="text-start" cols="12"  sm="8" justify="" align-self="start">
                 <v-row class="pa-5">
                   <v-col cols="12">
-                      <h2 class="mb-4 text-h3 font-weight-bold">{{nftDataById.title}}</h2>
+                      <h2 v-if="!editing" class="mb-4 text-h3 font-weight-bold">{{nftDataById.title}}</h2>
+                      <v-text-field
+                        v-else
+                        outlined
+                        label="Title"
+                        v-model="nftDataById.title"
+                        class="text-h4 font-weight-bold"
+                        filled
+                        dense
+                      ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                       <v-textarea
                         outlined
                         label="Description"
-                        readonly
+                        :readonly="!editing"
                         class="text-h6"
+                        v-model="nftDataById.detail"
                         :value="nftDataById.detail"
                         elevation="12"
                       >
@@ -105,6 +126,7 @@ export default {
       userId: '',
     },
     nftOwner: false,
+    editing: false,
   }),
   props: ['itemId'],
   
@@ -173,8 +195,33 @@ export default {
       this.artNFTmarketplace.methods.buyPhotoNFT(art.artNFT).send({ from: this.accounts[0], value: buyAmount }).once('receipt', (receipt) => {
         console.log("==response of buyArtNFT===", receipt);  
       });
-      
-    }                                                
+    },
+    editableData() {
+      this.editing = true;
+    },
+    async saveEditedData() {
+      // const artNFT = new this.web3.eth.Contract(this.jsonArtNFT.abi, this.itemId);
+      const art = await this.artNFTData.methods.getArtByNFTAddress(this.itemId).call();
+      console.log("+ update gen nft +", art);
+      console.log(this.nftDataById.detail);
+      // this.artNFTmarketplace.methods.ArtNFTUpdate(art.artNFT, this.nftDataById.title, this.nftDataById.detail).send({ from: this.accounts[0] }).once('receipt', (receipt) => {
+      //   console.log("=== updated dat ===", receipt);
+      // });
+
+      this.artNFTData.methods.UpdateArtdata(art.artNFT, this.nftDataById.title, this.nftDataById.detail).send({ from: this.accounts[0] }).once('receipt', (receipt) => {
+        console.log("=== updated dat ===", receipt);
+      })
+
+      // const updatedRsult = await this.artNFTData.methods.updateStatus(this.itemId, this.nftDataById.title, this.nftDataById.detail).call();
+      // console.log("== updated result ==", updatedRsult);
+
+
+    },
+    cancelEdit() {
+      this.editing = false;
+      this.nftDataById.detail = this.getArt.artNFTDetail;
+      this.nftDataById.title = this.getArt.artNFTname;
+    }
   }
 }
 </script>

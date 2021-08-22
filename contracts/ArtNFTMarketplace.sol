@@ -41,11 +41,12 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
     }
     
-    function ArtNFTUpdate(ArtNFT _artNFT, string title, string detail) public returns (bool) {
+    function ArtNFTUpdate(ArtNFT _artNFT, string memory title, string memory detail) public returns (bool) {
         ArtNFT artNFT = _artNFT;
+        uint artId = 1;
         ArtNFTData.Art memory art = artNFTData.getArtByNFTAddress(artNFT);
         artNFTData.UpdateArtdata(artNFT, title, detail);
-        uInt artId = 1;
+        
         emit ArtUpdated(artNFT, artId);
     }
 
