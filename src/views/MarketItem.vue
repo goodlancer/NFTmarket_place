@@ -74,7 +74,9 @@
                     <v-card class="pa-4" elevation="12">
                       <v-row>
                         <v-col cols="12">
-                          <span class="text-h6">Onwer :</span> <span class="text-h5 font-weight-bold">{{nftDataById.userId}}</span>
+                          <span class="text-h6">Onwer : </span>
+                          <span v-if="!nftOwner" class="text-h5 font-weight-bold">{{nftDataById.userId}}</span>
+                          <span class="text-h5 font-weight-bold">You</span>
                         </v-col>
                         <v-col cols="12">
                           <span class="text-h6">Type :</span> <span class="text-h5 font-weight-bold">Art</span>
