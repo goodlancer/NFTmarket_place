@@ -49,6 +49,13 @@ contract ArtNFTData is ArtNFTDataStorages {
         art.status = _newStatus;
     }
 
+    function UpdateArtdata(ArtNFT _artNFT, string memory _title, string memory dxetail) public return (bool) {
+        uint artIndex = getArtIbdex(_artNFT);
+        Art storage art = arts[artIndex];
+        art.artNFTname = _title;
+        art.artNFTDetail = dxetail;
+    }
+
     function getArt(uint index) public view returns (Art memory _art) {
         Art memory art = arts[index];
         return art;
