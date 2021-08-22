@@ -9,4 +9,9 @@ contract ArtNFTMarketplaceEvents {
         address ownerBeforeOwnershipTransferred,
         address ownerAfterOwnershipTransferred
     );
+
+    event ArtUpdated (
+        ArtNFT artNFT,
+        uint artId
+    );
 }

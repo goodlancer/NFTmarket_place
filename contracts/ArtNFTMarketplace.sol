@@ -40,6 +40,12 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         address ownerAfterOwnershipTransferred = artNFT.ownerOf(artId);
         emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
     }
+    
+    function ArtNFTUpdate(ArtNFT _artNFT, string title, string detail) public returns (bool) {
+        ArtNFT artNFT = _artNFT;
+        uInt artId = 1;
+        emit ArtUpdated(artNFT, artId);
+    }
 
     function reputation(address from, address to, uint256 artId) public returns (uint256, uint256) {
         return (0, 0);
