@@ -49,14 +49,14 @@ const getWeb3 = () =>
         const web3 = new Web3(window.ethereum);
         try {
         window.ethereum.enable();
-        // resolve(web3);
+        resolve(web3);
         initweb3 = web3;
         } catch (err) {
         // reject(err);
         console.log(err);
         }
         console.log(window);
-        resolve(web3);
+        // resolve(web3);
     })
 
 const getWallets = () => 

@@ -2,7 +2,7 @@
   <div class="fill-height" :style="backgroundStyle">
     <v-container class="fill-height">
       <v-row justify="center" align="center">
-        <v-col class="ma-auto" cols="4">
+        <v-col class="ma-auto" cols="6">
           <v-form v-model="signupvalid" ref="signupform">
             <v-card class="pa-10 deep-purple darken-4  white--text" outlined elevation="24">
               <v-row>
@@ -51,9 +51,11 @@
                   <v-text-field
                     label="Wallet"
                     solo
-                    :rules="[rules.required]"
+                    :rules="[walletRule.required]"
                     type="text"
                     name="wallet"
+                    readonly
+                    v-model="signupformData.wallet"
                   >
                   </v-text-field>
                   <v-text-field
@@ -91,6 +93,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import { getWeb3 } from '@/web3Server';
 export default {
   props: {
     background: {
@@ -104,9 +107,32 @@ export default {
         backgroundSize: '100% 100%',
         backgroundImage: `url(${this.background})`
       };
-    }
+    },
   },
+  async mounted() {
+    this.web3 = await getWeb3();
+    this.accounts = await this.web3.eth.getAccounts();
+    if(this.accounts.length < 1){
+      this.getAccounts();
+    }else{
+      this.signupformData.wallet = this.accounts[0];
+    }
+    // this.web3.eth.getAccounts().then((res) => {
+    //   console.log(res);
+    // })
+    // console.log(accounts);
+    // this.signupformData.wallet = accounts[0];
+  },
+  // watch: {
+  //   accounts: (newval) => {
+  //     console.log(newval);
+  //     return newval;
+  //     // this.accounts = this.web3.eth.getAccounts();
+  //   },
+  // },
   data: () => ({
+    web3: null,
+    accounts: [],
     signupvalid: true,
     signupformData: {
       firstname: '',
@@ -114,6 +140,7 @@ export default {
       username: '',
       email: '',
       password: '',
+      wallet: '',
     },
     emailRules: [
         v => !!v || 'E-mail is required',
@@ -122,6 +149,9 @@ export default {
     rules: {
         required: value => !!value || 'Required.',
       },
+    walletRule: {
+      required: value => !!value || 'Please Connect your wallet'
+    },
     passwordShow: false,
     passwordrules: {
           required: value => !!value || 'Required.',
@@ -141,6 +171,15 @@ export default {
           self.$router.push('/login');
         })
       }
+    },
+    getAccounts() {
+      const getAccInterval = setInterval(async ()=>{
+        this.accounts = await this.web3.eth.getAccounts();
+        if(this.accounts.length > 0){
+          this.signupformData.wallet = this.accounts[0];
+          clearInterval(getAccInterval);
+        }
+      })
     }
   }
 }

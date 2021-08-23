@@ -4,4 +4,5 @@ import { ArtNFTDataObjects } from './ArtNFTDataObjects.sol';
 
 contract ArtNFTDataStorages is ArtNFTDataObjects {
     Art[] public arts;
+    ArtDetail[] public artDetails;
 }

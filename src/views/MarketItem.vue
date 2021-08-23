@@ -23,6 +23,9 @@
                 <v-divider class="mt-5 mb-5"></v-divider>
                 <v-container>
                     <v-row>
+                      <v-col cols="12">
+                        <span class="text-h6 font-weight-bold">{{nftDataById.createdAt}}</span><span class="text-h6"> Created</span> 
+                      </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <Binancelogo class="mr-2" />  <span class="text-h4 font-weight-bold">{{nftDataById.price}}</span> <span class="text-h5">(BNB)</span>
                       </v-col>
@@ -78,8 +81,14 @@
                           <span v-if="!nftOwner" class="text-h5 font-weight-bold">{{nftDataById.userId}}</span>
                           <span class="text-h5 font-weight-bold">You</span>
                         </v-col>
+                        <v-col cols="6">
+                          <span class="text-h6">Category :</span> <span class="text-h5 font-weight-bold">{{nftDataById.category}}</span>
+                        </v-col>
+                        <v-col cols="6">
+                          <span class="text-h6">Type :</span> <span class="text-h5 font-weight-bold">{{nftDataById.type}}</span>
+                        </v-col>
                         <v-col cols="12">
-                          <span class="text-h6">Type :</span> <span class="text-h5 font-weight-bold">Art</span>
+                          <span class="text-h6">Keyword :</span> <span class="text-h5 font-weight-bold">{{nftDataById.keyword}}</span>
                         </v-col>
                       </v-row>
                     </v-card>
@@ -117,6 +126,7 @@ export default {
     jsonArtNFT: {},
     artNFTData: null,
     getArt: null,
+    getArtDetail: null,
     accounts: [],
     artNFTmarketplace: null,
     nftDataById: {
@@ -124,8 +134,12 @@ export default {
       imgUrl: '',
       title: '',
       detail: '',
+      category: '',
+      keyword: '',
+      type: '',
       price: '',
       userId: '',
+      createdAt: '',
     },
     nftOwner: false,
     editing: false,
@@ -167,10 +181,20 @@ export default {
     );
     console.log("== instance NFTData ==", this.artNFTData);
     this.getArt = await this.artNFTData.methods.getArtByNFTAddress(this.itemId).call();
+    this.getArtDetail = await this.artNFTData.methods.getArtDetailByNFTAddress(this.itemId).call();
     console.log("=== all arts contracts ===", this.getArt);
+    console.log("== all arts detail contracts ==", this.getArtDetail);
     this.nftDataById.id = this.getArt.artNFT;
     this.nftDataById.imgUrl = "https://ipfs.io/ipfs/"+this.getArt.ipfsHashofArt;
-    this.nftDataById.detail = this.getArt.artNFTDetail;
+    this.nftDataById.detail = this.getArtDetail.artNFTdetail;
+    const spDetails = this.getArtDetail.artNFTspfield.split('(+)');
+    console.log("divition sp details", spDetails);
+    const creatTimestamp = parseInt(spDetails[3]);
+    const createdDate = new Date(creatTimestamp);
+    this.nftDataById.category = spDetails[0];
+    this.nftDataById.type = spDetails[1];
+    this.nftDataById.keyword = spDetails[2];
+    this.nftDataById.createdAt = createdDate.toLocaleString();
     this.nftDataById.title = this.getArt.artNFTname;
     this.nftDataById.price = this.web3.utils.fromWei(this.getArt.artPrice, 'ether');
     this.nftDataById.userId = this.getArt.ownerAddress;
@@ -184,7 +208,7 @@ export default {
     ]),
     async buyItem(){
       console.log('this gen art');
-      
+      let self = this;
       // const artId = 1;
       const artNFT = new this.web3.eth.Contract(this.jsonArtNFT.abi, this.itemId);
       console.log("== bue artNFT ==", artNFT);
@@ -196,6 +220,7 @@ export default {
       console.log("this is my art", art.artNFT);
       this.artNFTmarketplace.methods.buyPhotoNFT(art.artNFT).send({ from: this.accounts[0], value: buyAmount }).once('receipt', (receipt) => {
         console.log("==response of buyArtNFT===", receipt);  
+        self.$router.push('/market');
       });
     },
     editableData() {

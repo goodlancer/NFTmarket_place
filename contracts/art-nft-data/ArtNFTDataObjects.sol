@@ -7,11 +7,15 @@ contract ArtNFTDataObjects {
         ArtNFT artNFT;
         string artNFTname;
         string artNFTSymbol;
-        string artNFTDetail;
         address ownerAddress;
         uint artPrice;
         string ipfsHashofArt;
         string status;
         uint256 reputation;
+    }
+
+    struct ArtDetail {
+        string artNFTdetail;
+        string artNFTspfield; //cartegory(+)keyword(+)type(+)timestemp
     }
 }

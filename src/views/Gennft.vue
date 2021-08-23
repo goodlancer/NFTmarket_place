@@ -90,6 +90,15 @@
                       <v-text-field
                         solo
                         :rules="[rules.required]"
+                        v-model="nftDataform.keyword"
+                        type="text"
+                        label="Keyword"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        solo
+                        :rules="[rules.required]"
                         v-model="nftDataform.price"
                         type="number"
                         label="Price"
@@ -155,6 +164,7 @@ export default {
       detail: '',
       type: '',
       category: '',
+      keyword: '',
       price: ''
     },
     rules: {
@@ -245,7 +255,9 @@ export default {
           console.log(ipfsId);
           const art_price = self.web3.utils.toWei(self.nftDataform.price, 'ether');
           const artsymbol = "truhelix";
-          self.artNFTFactory.methods.createNewArtNFT(self.nftDataform.title, self.nftDataform.detail, artsymbol, art_price, ipfsId)
+          const nowTime = new Date().valueOf();
+          const spfield = self.nftDataform.category + "(+)" + self.nftDataform.type + "(+)" + self.nftDataform.keyword + "(+)" + nowTime.toString();
+          self.artNFTFactory.methods.createNewArtNFT(self.nftDataform.title, self.nftDataform.detail, spfield, artsymbol, art_price, ipfsId)
             .send({ from: self.account[0] })
             .once('receipt', (receipt) => {
               console.log('===receipt===', receipt);

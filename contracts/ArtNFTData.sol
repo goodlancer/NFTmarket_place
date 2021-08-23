@@ -15,6 +15,7 @@ contract ArtNFTData is ArtNFTDataStorages {
         string memory _artNFTname,
         string memory _artNFTSymbol,
         string memory _artNFTDetail,
+        string memory _artNFTspfield,
         address _ownerAddress,
         uint _artPrice,
         string memory _ipfsHashOfArt
@@ -23,14 +24,18 @@ contract ArtNFTData is ArtNFTDataStorages {
             artNFT: _artNFT,
             artNFTname: _artNFTname,
             artNFTSymbol: _artNFTSymbol,
-            artNFTDetail: _artNFTDetail,
             ownerAddress: _ownerAddress,
             artPrice: _artPrice,
             ipfsHashofArt: _ipfsHashOfArt,
             status: 'open',
             reputation: 0
         });
+        ArtDetail memory artDetail = ArtDetail({
+            artNFTdetail: _artNFTDetail,
+            artNFTspfield: _artNFTspfield
+        });
         arts.push(art);
+        artDetails.push(artDetail);
 
         artAddresses = _artAddresses;
     }
@@ -53,7 +58,7 @@ contract ArtNFTData is ArtNFTDataStorages {
         uint artIndex = getArtIndex(_artNFT);
         Art storage art = arts[artIndex];
         art.artNFTname = _title;
-        art.artNFTDetail = dxetail;
+        // art.artNFTDetail = dxetail;
     }
 
     function getArt(uint index) public view returns (Art memory _art) {
@@ -83,6 +88,20 @@ contract ArtNFTData is ArtNFTDataStorages {
         }
         Art memory art = arts[artIndex];
         return art;
+    }
+
+    function getArtDetailByNFTAddress(ArtNFT artNFT) public view returns (ArtDetail memory _artDetail) {
+        address ART_NFT = address(artNFT);
+
+        uint artIndex;
+        for (uint i=0; i < artAddresses.length; i++) {
+            if(artAddresses[i] == ART_NFT) {
+                artIndex = i;
+            }
+        }
+
+        ArtDetail memory artdetail = artDetails[artIndex];
+        return artdetail;
     }
 
     function getAllArts() public view returns (Art[] memory _arts) {
