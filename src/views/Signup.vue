@@ -48,7 +48,15 @@
                     name="email"
                     v-model="signupformData.email"
                   />
-                   <v-text-field
+                  <v-text-field
+                    label="Wallet"
+                    solo
+                    :rules="[rules.required]"
+                    type="text"
+                    name="wallet"
+                  >
+                  </v-text-field>
+                  <v-text-field
                     label="Password"
                     solo
                     v-model="signupformData.password"
