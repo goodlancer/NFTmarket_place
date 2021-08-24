@@ -212,13 +212,15 @@ export default {
     const allArts = await artNFTData.methods.getAllArts().call();
     console.log("=== all arts contracts ===", allArts);
     allArts.map((item) => {
-      this.collections.push({
-        id: item.artNFT,
-        dataUrl: "https://ipfs.io/ipfs/"+item.ipfsHashofArt,
-        title: item.artNFTname,
-        detail: item.artNFTSymbol,
-        price: this.web3.utils.fromWei(item.artPrice, 'ether'),
-      })
+      if(this.wallet.walletId == item.ownerAddress){
+        this.collections.push({
+          id: item.artNFT,
+          dataUrl: "https://ipfs.io/ipfs/"+item.ipfsHashofArt,
+          title: item.artNFTname,
+          detail: item.artNFTSymbol,
+          price: this.web3.utils.fromWei(item.artPrice, 'ether'),
+        })
+      }
     })
     console.log('=== all Arts ===', this.collections);
   },

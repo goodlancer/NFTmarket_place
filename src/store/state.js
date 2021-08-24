@@ -6,6 +6,7 @@ const userState = {
     firstname: '',
     lastname: '',
     id: '',
+    wallet: ''
 }
 
 const state = {
