@@ -79,7 +79,7 @@
                         <v-col cols="12">
                           <span class="text-h6">Onwer : </span>
                           <span v-if="!nftOwner" class="text-h5 font-weight-bold">{{nftDataById.userId}}</span>
-                          <span class="text-h5 font-weight-bold">You</span>
+                          <span v-else class="text-h5 font-weight-bold">You</span>
                         </v-col>
                         <v-col cols="6">
                           <span class="text-h6">Category :</span> <span class="text-h5 font-weight-bold">{{nftDataById.category}}</span>
