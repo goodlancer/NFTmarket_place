@@ -273,7 +273,8 @@ export default {
       reader.onload = function(e){
         console.log(e.target)
         var uril = e.target.result
-        self.nftContentdata = uril.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/)[2];
+        self.nftContentdata = uril.split('base64,')[1];
+        console.log(uril.split('base64,'));
         self.$refs.contentArtimg.src = uril
       }
       reader.readAsDataURL(artFiles[0])

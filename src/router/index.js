@@ -22,14 +22,14 @@ const routes = [
     path: '/market',
     name: 'Market',
     component: Market,
-    // meta: { requiresAuth: true }
+    meta: { requiresAuth: true }
   },
   {
     path: '/market/:itemId',
     name: 'Market Item View',
     component: MarketItem,
     props: true,
-    // meta: { requiresAuth: true }
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -45,7 +45,7 @@ const routes = [
     path: '/generatenft',
     name: 'GenerateNFT',
     component: Gennft,
-    // meta: { requiresAuth: true }
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',

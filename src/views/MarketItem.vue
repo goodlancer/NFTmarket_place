@@ -91,7 +91,7 @@
                           <span class="text-h6">Keyword :</span> <span class="text-h5 font-weight-bold">{{nftDataById.keyword}}</span>
                         </v-col>
                         <v-col cols="6" v-if="nftOwner">
-                          <a href=""> <v-btn color="primary" ><v-icon class="mr-3">mdi-download</v-icon>DownLoad Image</v-btn></a>
+                          <v-btn color="primary" @click="downloadContent()"><v-icon class="mr-3">mdi-download</v-icon>DownLoad Image</v-btn>
                         </v-col>
                       </v-row>
                     </v-card>
@@ -144,6 +144,7 @@ export default {
       userId: '',
       createdAt: '',
     },
+    downlaodLink: '',
     nftOwner: false,
     editing: false,
   }),
@@ -231,8 +232,16 @@ export default {
     },
     downloadContent()
     {
+      // // console.log(this.itemId)
+      // console.log('thiswoker')
+      // alert('ss');
       this.getNFTById({id: this.itemId}).then((res) => {
         console.log(res.data);
+        // self.downlaodLink = 'data:image/png;base64,' + res.data.content;
+        const downA = document.createElement("a"); //Create <a>
+        downA.href = "data:image/png;base64," + res.data.conten; //Image Base64 Goes here
+        downA.download = "Image.png"; //File name Here
+        downA.click(); //Downloaded file
       })
     },
     async saveEditedData() {

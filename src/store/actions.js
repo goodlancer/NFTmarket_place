@@ -1,10 +1,10 @@
-// import authHeader from './authHeader';
+import authHeader from './authHeader';
 
 // import { getWeb3 } from '@/web3Server'
-const authHeader = require('./authHeader');
+// const authHeader = require('./authHeader');
 const axios = require('axios')
 const apiUrl = 'http://127.0.0.1:3000/api/'
-// const apiUrl = "https://truhelix.com/"
+// const apiUrl = "https://truhelix.com/node/api/"
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
