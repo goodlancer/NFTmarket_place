@@ -39,28 +39,6 @@
                     </template>
                   </v-img>
                   <input type="file" ref="nftfile" @change="onnftfilechange" style="display: none"/>
-
-                   <v-img 
-                      ref="contentArtimg"
-                      max-width="500"
-                      aspect-ratio="1"
-                      elevation="24"
-                      class="border rounded-lg mt-2"
-                      hide-input='true'
-                      @click="uploadArt()"
-                      @dragover="dragover"
-                      @dragleave="dragleave"
-                      @drop="artImagedrop"
-                    >
-                      <template v-slot:placeholder>
-                        <v-row class="fill-height blue lighten-1 ma-0" justify="center" align="center">
-                          <v-col>
-                            <span class="text-h5 font-weight-bold">Please upload the Content image</span>
-                          </v-col>
-                        </v-row>
-                      </template>
-                    </v-img>
-                    <input type="file" ref="Artfile" @change="onArtfilechange" style="display: none"/>
                 </v-col>
                 
                 <v-col class="px-12" cols="8">
@@ -237,12 +215,6 @@ export default {
       this.onnftfilechange()
       console.log(event)
     },
-    artImagedrop(event){
-      event.preventDefault();
-      this.$refs.Artfile.files = event.dataTransfer.files
-      this.onArtfilechange()
-      console.log(event)
-    },
     submitNFTdata(){
       alert("myNFTgen");
     },
@@ -257,28 +229,17 @@ export default {
         console.log(e.target);
         var uril = e.target.result
         self.nftStateStr = '';
+        self.nftContentdata = uril.split('base64,')[1]; //content image for the nft
         self.$refs.nftdataImg.src = uril
       }
       reader.readAsDataURL(nftfiles[0])
       var bufferReader = new FileReader();
       bufferReader.readAsArrayBuffer(nftfiles[0])
       bufferReader.onloadend = () => {
-        self.nftdata = Buffer(bufferReader.result);
+        self.nftdata = Buffer(bufferReader.result);  //cover image for the nft trading
       }
     },
-    onArtfilechange(){
-      let self = this
-      const artFiles = this.$refs.Artfile.files
-      var reader = new FileReader();
-      reader.onload = function(e){
-        console.log(e.target)
-        var uril = e.target.result
-        self.nftContentdata = uril.split('base64,')[1];
-        console.log(uril.split('base64,'));
-        self.$refs.contentArtimg.src = uril
-      }
-      reader.readAsDataURL(artFiles[0])
-    },
+    
     uploadImg(){
       this.$refs.nftfile.click();
     },
@@ -318,7 +279,7 @@ export default {
                 // nftContentdata
                 const addNFTdata = {
                   file: self.nftContentdata,
-                  token: receipt.to,
+                  token: ipfsId,
                 }
                 self.generateNFT(addNFTdata).then((res) => {
                   console.log(res);

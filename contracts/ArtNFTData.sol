@@ -108,4 +108,12 @@ contract ArtNFTData is ArtNFTDataStorages {
         return arts;
     }
 
+    function baseTokenURI() public pure returns (string memory) {
+        return "https://ipfs.io/ipfs/";
+    }
+
+    function getTokenURL(string memory _ipfsHashOfPhoto) public view returns (string memory) {
+        return Strings.strConcat(baseTokenURI(), _ipfsHashOfPhoto);
+    }
+
 }

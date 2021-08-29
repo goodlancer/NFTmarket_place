@@ -22,22 +22,25 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
     function buyPhotoNFT(ArtNFT _artNFT) public payable returns (bool) {
         ArtNFT artNFT = _artNFT;
         ArtNFTData.Art memory art = artNFTData.getArtByNFTAddress(artNFT);
+        ArtNFTData.ArtDetail memory artDetail = artNFTData.getArtDetailByNFTAddress(artNFT);
         address _seller = art.ownerAddress;
         address payable seller = address(uint160(_seller));
         uint buyAmount = art.artPrice;
-
         require(msg.value == buyAmount, "msg.value should be equal to the buyAmount");
         seller.transfer(msg.value);
+
+        // artTokenURI = ArtNFTData.getTokenURL(art.ipfsHashofArt);
         address buyer = msg.sender;
-        uint artId = 1;
-        // artNFT.approve(buyer, artId);
-        address ownerBeforeOwnershipTransferred = artNFT.ownerOf(artId);
+        // ArtNFT artNFT = new ArtNFT(buyer, art.artNFTname, art.artNFTSymbol, artDetail.artNFTdetail, artTokenURI, art.artPrice);
+        // uint artId = 1;
+        // // artNFT.approve(buyer, artId);
+        // address ownerBeforeOwnershipTransferred = artNFT.ownerOf(artId);
 
-        // transferOwnershipOfArtNFT(artNFT, artId, buyer);
-        artNFTData.updateOwnerOfArtNFT(artNFT, buyer);
-        artNFTData.updateStatus(artNFT, "Cancelled");
+        // // transferOwnershipOfArtNFT(artNFT, artId, buyer);
+        // artNFTData.updateOwnerOfArtNFT(artNFT, buyer);
+        // artNFTData.updateStatus(artNFT, "Cancelled");
 
-        address ownerAfterOwnershipTransferred = artNFT.ownerOf(artId);
+        // address ownerAfterOwnershipTransferred = artNFT.ownerOf(artId);
         emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
     }
     

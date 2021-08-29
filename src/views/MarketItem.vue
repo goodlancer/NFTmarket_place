@@ -235,7 +235,7 @@ export default {
       // // console.log(this.itemId)
       // console.log('thiswoker')
       // alert('ss');
-      this.getNFTById({id: this.itemId}).then((res) => {
+      this.getNFTById({id: this.getArt.ipfsHashofArt}).then((res) => {
         console.log(res.data);
         // self.downlaodLink = 'data:image/png;base64,' + res.data.content;
         const downA = document.createElement("a"); //Create <a>
