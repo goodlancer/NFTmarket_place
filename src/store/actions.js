@@ -1,7 +1,7 @@
 // import authHeader from './authHeader';
 
 // import { getWeb3 } from '@/web3Server'
-// const authHeader = require('./authHeader');
+const authHeader = require('./authHeader');
 const axios = require('axios')
 const apiUrl = 'http://127.0.0.1:3000/api/'
 // const apiUrl = "https://truhelix.com/"
@@ -67,7 +67,7 @@ const actions = {
 				profileImg: payload
 			}
 
-			axios.post(`${apiUrl}user/profileImage`, profileData).then((res) => {
+			axios.post(`${apiUrl}user/profileImage`, profileData, { headers: authHeader() }).then((res) => {
 				context.commit('UPDATE_USER_INFO', res.data);
 				resolve(res);
 			}).catch((err) => {
@@ -85,7 +85,7 @@ const actions = {
 				username: payload.username,
 			}
 
-			axios.post(`${apiUrl}user/profileUpdate`, profileData).then((res) => {
+			axios.post(`${apiUrl}user/profileUpdate`, profileData, { headers: authHeader() }).then((res) => {
 				context.commit('UPDATE_USER_INFO', res.data);
 				resolve(res);
 			}).catch((err) => {
@@ -96,13 +96,11 @@ const actions = {
 	generateNFT(context, payload) {
 		return new Promise((resolve, reject) => {
 			var nftdata = {
-				datalink: payload.dataUrl,
-				title: payload.title,
-				detail: payload.detail,
-				price: payload.price,
+				file: payload.file,
+				token: payload.token,
 			}
 
-			axios.post(`${apiUrl}nftdata/create/`, nftdata).then((res) => {
+			axios.post(`${apiUrl}nftdata/create/`, nftdata, { headers: authHeader() }).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -111,7 +109,7 @@ const actions = {
 	},
 	getNFTs() {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}nftdata/getall/`).then((res) => {
+			axios.get(`${apiUrl}nftdata/getall/`, { headers: authHeader() }).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -120,7 +118,7 @@ const actions = {
 	},
 	getNFTById(context, payload) {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}nftdata/get/${payload.id}`).then((res) => {
+			axios.get(`${apiUrl}nftdata/get/${payload.id}`, { headers: authHeader() }).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));
@@ -129,7 +127,7 @@ const actions = {
 	},
 	getNFTCollections() {
 		return new Promise((resolve, reject) => {
-			axios.get(`${apiUrl}nftdata/getbyUser`).then((res) => {
+			axios.get(`${apiUrl}nftdata/getbyUser`, { headers: authHeader() }).then((res) => {
 				resolve(res);
 			}).catch((err) => {
 				reject(new Error(err));

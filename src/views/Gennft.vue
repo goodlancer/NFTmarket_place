@@ -177,6 +177,7 @@ export default {
     artNFTmarketAddress: null,
     NFTgenContract: require('../../build/contracts/ArtNFT.json'),
     nftdata: null,
+    nftContentdata: null,
     nftformvalid: true,
     nftStateStr: 'Please upload your image',
     image: null,
@@ -272,6 +273,7 @@ export default {
       reader.onload = function(e){
         console.log(e.target)
         var uril = e.target.result
+        self.nftContentdata = uril.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/)[2];
         self.$refs.contentArtimg.src = uril
       }
       reader.readAsDataURL(artFiles[0])
@@ -312,7 +314,16 @@ export default {
               artNFT.methods.ownerOf(artId).call().then(owner => console.log('ooooo= owner of artId 1 =oooo', owner));
               artNFT.methods.approve(self.artNFTmarketAddress, artId).send({from: self.account[0]}).once('receipt', (receipt) => {
                 console.log("== nft approve ==", receipt);
-                self.$router.push('/market')
+                // nftContentdata
+                const addNFTdata = {
+                  file: self.nftContentdata,
+                  token: receipt.to,
+                }
+                self.generateNFT(addNFTdata).then((res) => {
+                  console.log(res);
+                  self.$router.push('/market')
+                })
+                // self.$router.push('/market')
                 // self.artNFTmarket.methods.openTradeWhenCreateNewPhotoNFT(Art_NFT, artId, art_price)
                 // .send({ from: self.account[0] })
                 //   .once('receipt', (receipt) => {
