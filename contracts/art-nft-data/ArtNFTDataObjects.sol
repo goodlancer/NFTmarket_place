@@ -6,7 +6,7 @@ contract ArtNFTDataObjects {
     struct Art {
         ArtNFT artNFT;
         string artNFTname;
-        string artNFTSymbol;
+        // string artNFTSymbol;
         address ownerAddress;
         uint artPrice;
         string ipfsHashofArt;

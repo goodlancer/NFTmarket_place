@@ -2,6 +2,7 @@ pragma solidity ^0.5.16;
 pragma experimental ABIEncoderV2;
 
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
+import { Strings } from "./libraries/Strings.sol";
 import { ArtNFT } from "./ArtNFT.sol";
 import { ArtNFTTradable } from "./ArtNFTTradable.sol";
 import { ArtNFTMarketplaceEvents } from "./art-nft-marketplace/ArtNFTMarketplaceEvents.sol";
@@ -12,7 +13,7 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
     using SafeMath for uint256;
 
     address public ART_NFT_MARKETPLACE;
-
+    
     ArtNFTData public artNFTData;
     ArtNFTFactory artNFTFactory;
     constructor(ArtNFTData _artNFTData, address _factoryAddress) public ArtNFTTradable(_artNFTData) {
@@ -31,21 +32,37 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         require(msg.value == buyAmount, "msg.value should be equal to the buyAmount");
         seller.transfer(msg.value);
 
-        // artTokenURI = ArtNFTData.getTokenURL(art.ipfsHashofArt);
         address buyer = msg.sender;
 
         uint artId = 1;
-        artNFTFactory.createNewArtNFT(art.artNFTname, artDetail.artNFTdetail, artDetail.artNFTspfield, art.artNFTSymbol, art.artPrice, art.ipfsHashofArt);
-        // // artNFT.approve(buyer, artId);
+        // artNFTFactory.sellingArtNFT(buyer, art.artNFTname, artDetail.artNFTdetail, artDetail.artNFTspfield, art.artNFTSymbol, art.artPrice, art.ipfsHashofArt);
+        
+        string memory tokenURI = getTokenURL(art.ipfsHashofArt);
+        string memory artSymbol = "truhelix";
+        ArtNFT artNFT_new = new ArtNFT(buyer, art.artNFTname, artSymbol, artDetail.artNFTdetail, tokenURI, art.artPrice);
+        // artAddresses = artNFTData.artAddresses;
+        // address[] memory addresses = artNFTData.artAddresses;
+        // artAddresses.push(address(artNFT_new));
+        address newArtAdd = address(artNFT_new);
+        string memory artdetail = artDetail.artNFTdetail;
+        string memory artspfield = artDetail.artNFTspfield;
+        string memory artname = art.artNFTname;
+        string memory hasyipfsofArt = art.ipfsHashofArt;
+        uint amount = art.artPrice;
+        artNFTData.saveMetadataofArtNFT(artNFT_new, artname, artdetail, artspfield, msg.sender, amount, hasyipfsofArt);
+        artNFTData.updateStatus(artNFT_new, "Open");
+
+
+        // artNFT.approve(buyer, artId);
         // address ownerBeforeOwnershipTransferred = artNFT.ownerOf(artId);
 
-        // // transferOwnershipOfArtNFT(artNFT, artId, buyer);
+        // // // transferOwnershipOfArtNFT(artNFT, artId, buyer);
         // artNFTData.updateOwnerOfArtNFT(artNFT, buyer);
         // artNFTData.updateStatus(artNFT, "Cancelled");
 
         // address ownerAfterOwnershipTransferred = artNFT.ownerOf(artId);
         // emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
-        emit ArtNFTOwnershipChnaged(artNFT, artId, _seller, buyer);
+        emit ArtNFTOwnershipChnaged(artNFT_new, _seller, buyer);
     }
     
     function ArtNFTUpdate(ArtNFT _artNFT, string memory title, string memory detail) public returns (bool) {
@@ -65,5 +82,13 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         uint256 currentReputationCount;
 
         return currentReputationCount;
+    }
+
+    function baseTokenURI() public pure returns (string memory) {
+        return "https://ipfs.io/ipfs/";
+    }
+
+    function getTokenURL(string memory _ipfsHashOfPhoto) public view returns (string memory) {
+        return Strings.strConcat(baseTokenURI(), _ipfsHashOfPhoto);
     }
 }

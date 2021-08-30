@@ -10,10 +10,11 @@ contract ArtNFTData is ArtNFTDataStorages {
     constructor() public {}
 
     function saveMetadataofArtNFT(
-        address[] memory _artAddresses,
+        // address[] memory _artAddresses,
+        // address _artAddress,
         ArtNFT _artNFT,
         string memory _artNFTname,
-        string memory _artNFTSymbol,
+        // string memory _artNFTSymbol,
         string memory _artNFTDetail,
         string memory _artNFTspfield,
         address _ownerAddress,
@@ -23,7 +24,7 @@ contract ArtNFTData is ArtNFTDataStorages {
         Art memory art = Art({
             artNFT: _artNFT,
             artNFTname: _artNFTname,
-            artNFTSymbol: _artNFTSymbol,
+            // artNFTSymbol: _artNFTSymbol,
             ownerAddress: _ownerAddress,
             artPrice: _artPrice,
             ipfsHashofArt: _ipfsHashOfArt,
@@ -37,7 +38,8 @@ contract ArtNFTData is ArtNFTDataStorages {
         arts.push(art);
         artDetails.push(artDetail);
 
-        artAddresses = _artAddresses;
+        // artAddresses = _artAddresses;
+        artAddresses.push(address(_artNFT));
     }
 
     function updateOwnerOfArtNFT(ArtNFT _artNFT, address _newOwner) public returns (bool) {
@@ -106,14 +108,6 @@ contract ArtNFTData is ArtNFTDataStorages {
 
     function getAllArts() public view returns (Art[] memory _arts) {
         return arts;
-    }
-
-    function baseTokenURI() public pure returns (string memory) {
-        return "https://ipfs.io/ipfs/";
-    }
-
-    function getTokenURL(string memory _ipfsHashOfPhoto) public view returns (string memory) {
-        return Strings.strConcat(baseTokenURI(), _ipfsHashOfPhoto);
     }
 
 }

@@ -5,7 +5,6 @@ import { ArtNFT } from "../ArtNFT.sol";
 contract ArtNFTMarketplaceEvents {
     event ArtNFTOwnershipChnaged (
         ArtNFT artNFT,
-        uint artId,
         address ownerBeforeOwnershipTransferred,
         address ownerAfterOwnershipTransferred
     );

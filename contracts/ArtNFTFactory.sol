@@ -30,13 +30,21 @@ contract ArtNFTFactory is ArtNFTFactoryStorages {
         ArtNFT artNFT = new ArtNFT(owner, nftName, nftSymbol, nftDetail, tokenURI, artPrice);
         artAddresses.push(address(artNFT));
 
-        artNFTdata.saveMetadataofArtNFT(artAddresses, artNFT, nftName, nftSymbol, nftDetail, nftSPfield, msg.sender, artPrice, ipfsHashOfArt);
+        // artNFTdata.saveMetadataofArtNFT(artAddresses, artNFT, nftName, nftSymbol, nftDetail, nftSPfield, msg.sender, artPrice, ipfsHashOfArt);
+        artNFTdata.saveMetadataofArtNFT(artNFT, nftName, nftDetail, nftSPfield, msg.sender, artPrice, ipfsHashOfArt);
         artNFTdata.updateStatus(artNFT, "Open");
 
         emit ArtNFTCreated(msg.sender, artNFT, nftName, nftSymbol, nftDetail, artPrice, ipfsHashOfArt);
     }
 
-    function sellingArtNFT(ArtNFT _artNFT, address buyer) public returns (bool) {
+    function sellingArtNFT(address buyer, string memory nftName, string memory nftDetail, string memory nftSPfield, string memory nftSymbol, uint artPrice, string memory ipfsHashOfArt) public returns (bool) {
+         string memory tokenURI = getTokenURL(ipfsHashOfArt);
+         address owner = buyer;
+        ArtNFT artNFT = new ArtNFT(owner, nftName, nftSymbol, nftDetail, tokenURI, artPrice);
+        artAddresses.push(address(artNFT));
+
+        artNFTdata.saveMetadataofArtNFT(artNFT, nftName, nftDetail, nftSPfield, owner, artPrice, ipfsHashOfArt);
+        artNFTdata.updateStatus(artNFT, "Open");
         
     }
 
