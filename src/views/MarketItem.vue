@@ -87,8 +87,11 @@
                         <v-col cols="6">
                           <span class="text-h6">Type :</span> <span class="text-h5 font-weight-bold">{{nftDataById.type}}</span>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols="6">
                           <span class="text-h6">Keyword :</span> <span class="text-h5 font-weight-bold">{{nftDataById.keyword}}</span>
+                        </v-col>
+                        <v-col cols="6" v-if="nftOwner">
+                          <a href=""> <v-btn color="primary" ><v-icon class="mr-3">mdi-download</v-icon>DownLoad Image</v-btn></a>
                         </v-col>
                       </v-row>
                     </v-card>
@@ -225,6 +228,12 @@ export default {
     },
     editableData() {
       this.editing = true;
+    },
+    downloadContent()
+    {
+      this.getNFTById({id: this.itemId}).then((res) => {
+        console.log(res.data);
+      })
     },
     async saveEditedData() {
       // const artNFT = new this.web3.eth.Contract(this.jsonArtNFT.abi, this.itemId);
