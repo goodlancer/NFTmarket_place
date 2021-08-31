@@ -37,6 +37,9 @@
                     >
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
+                    <v-icon v-if="item.own">
+                      mdi-antenna
+                    </v-icon>
                   </v-app-bar>
                   <v-img
                     :src="item.dataUrl"
@@ -85,6 +88,7 @@ export default {
   },
   data: () => ({
     web3: null,
+    walletId: null,
     datas: [],
   }),
   computed: {
@@ -103,6 +107,8 @@ export default {
     console.log('first mounted', this.web3);
     const networkId = await this.web3.eth.net.getId();
     console.log('web3 network', networkId);
+    const accounts = await this.web3.eth.getAccounts();  
+    this.walletId = accounts[0]; 
     const jsonArtNFTData = require("../../build/contracts/ArtNFTData.json");
     const deployNet = jsonArtNFTData.networks[networkId.toString()];
     const artNFTData = new this.web3.eth.Contract(
@@ -113,12 +119,17 @@ export default {
     const allArts = await artNFTData.methods.getAllArts().call();
     console.log("=== all arts contracts ===", allArts);
     allArts.map((item) => {
+      var ownable = false;
+      if(item.ownerAddress == this.walletId){
+        ownable = true;
+      }
       this.datas.push({
         id: item.artNFT,
         dataUrl: "https://ipfs.io/ipfs/"+item.ipfsHashofArt,
         title: item.artNFTname,
         detail: item.artNFTSymbol,
         price: this.web3.utils.fromWei(item.artPrice, 'ether'),
+        own: ownable,
       })
     })
     console.log('=== all Arts ===', this.datas);
@@ -136,11 +147,16 @@ export default {
       this.getNFTs().then((res) => {
         console.log(res);
         res.data.nftdata.map((item) => {
+          var ownable = false;
+          if(item.ownerAddress == this.walletId){
+            ownable = true;
+          }
           this.datas.push({
             id: item._id,
             dataUrl: item.datalink,
             title: item.title,
             price: item.price,
+            own: ownable,
           })
         })
       })
