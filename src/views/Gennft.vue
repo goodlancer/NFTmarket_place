@@ -140,7 +140,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { initweb3, getWeb3 } from '@/web3Server';
-import $ from "jquery";
+// import $ from "jquery";
 
 
 const ipfs = require('@/components/ifpsEngine.js');
@@ -224,8 +224,56 @@ export default {
     onFileInfo(){
       console.log('sss')
     },
-    onImgLoad(){
+    onImgLoad(event){
       alert('loading');
+      let self = this;
+      var newImg = new Image();
+      newImg.onload = function() {
+        console.log('size', this.width+'LLL'+this.height)
+        var canvas = document.createElement("canvas");
+        canvas.width = 300;
+        canvas.height = 350;
+        var context = canvas.getContext("2d");
+        context.scale(300/this.width,  350/this.height);
+        context.drawImage(this, 0, 0);
+        // var imageData = context.getImageData(0, 0, 300, 350);
+        // self.nftdata = Buffer(imageData.data.buffer); 
+        // console.log('getted self data',  self.nftdata);
+        var imageData = canvas.toDataURL('image/png');
+        //Create blob from DataURL
+        var blob = self.dataURItoBlob(imageData);
+        var bufferReader = new FileReader();
+        bufferReader.readAsArrayBuffer(blob)
+        bufferReader.onloadend = () => {
+          console.log(bufferReader.result);
+          self.nftdata = Buffer(bufferReader.result);  //cover image for the nft trading
+          console.log('buffer result', self.nftdata);
+        }
+      }
+      newImg.src = event;
+      // var canvas = document.createElement("canvas");
+      // canvas.width = 300;
+      // canvas.height = 300;
+      // var context = canvas.getContext("2d");
+      // context.scale(width/this.width,  height/this.height);
+      // context.drawImage(event, 0, 0); 
+      // deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
+    },
+    dataURItoBlob(dataURI) {  //PROGRAM A engine
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], {type:mimeString});
     },
     onnftfilechange(){
       let self = this
@@ -239,12 +287,13 @@ export default {
         self.$refs.nftdataImg.src = uril;
       }
       reader.readAsDataURL(nftfiles[0])
-      var bufferReader = new FileReader();
-      bufferReader.readAsArrayBuffer(nftfiles[0])
-      bufferReader.onloadend = () => {
-        console.log(bufferReader.result);
-        self.nftdata = Buffer(bufferReader.result);  //cover image for the nft trading
-      }
+      // var bufferReader = new FileReader();
+      // bufferReader.readAsArrayBuffer(nftfiles[0])
+      // bufferReader.onloadend = () => {
+      //   console.log(bufferReader.result);
+      //   self.nftdata = Buffer(bufferReader.result);  //cover image for the nft trading
+      //   console.log('buffer result', self.nftdata);
+      // }
     },
     
     uploadImg(){
