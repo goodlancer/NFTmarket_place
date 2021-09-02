@@ -224,8 +224,8 @@ export default {
     onFileInfo(){
       console.log('sss')
     },
+    //PROGRAM A engine
     onImgLoad(event){
-      alert('loading');
       let self = this;
       var newImg = new Image();
       newImg.onload = function() {
@@ -249,7 +249,7 @@ export default {
       }
       newImg.src = event;
     },
-    dataURItoBlob(dataURI) {  //PROGRAM A engine
+    dataURItoBlob(dataURI) {  
         var byteString;
         if (dataURI.split(',')[0].indexOf('base64') >= 0)
             byteString = atob(dataURI.split(',')[1]);
