@@ -236,11 +236,8 @@ export default {
         var context = canvas.getContext("2d");
         context.scale(300/this.width,  350/this.height);
         context.drawImage(this, 0, 0);
-        // var imageData = context.getImageData(0, 0, 300, 350);
-        // self.nftdata = Buffer(imageData.data.buffer); 
-        // console.log('getted self data',  self.nftdata);
+      
         var imageData = canvas.toDataURL('image/png');
-        //Create blob from DataURL
         var blob = self.dataURItoBlob(imageData);
         var bufferReader = new FileReader();
         bufferReader.readAsArrayBuffer(blob)
@@ -251,13 +248,6 @@ export default {
         }
       }
       newImg.src = event;
-      // var canvas = document.createElement("canvas");
-      // canvas.width = 300;
-      // canvas.height = 300;
-      // var context = canvas.getContext("2d");
-      // context.scale(width/this.width,  height/this.height);
-      // context.drawImage(event, 0, 0); 
-      // deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
     },
     dataURItoBlob(dataURI) {  //PROGRAM A engine
         var byteString;
