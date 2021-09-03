@@ -6,6 +6,7 @@ import { ArtNFT } from "./ArtNFT.sol";
 import { ArtNFTTradable } from "./ArtNFTTradable.sol";
 import { ArtNFTMarketplaceEvents } from "./art-nft-marketplace/ArtNFTMarketplaceEvents.sol";
 import { ArtNFTData } from "./ArtNFTData.sol";
+import { ArtNFTFactory } from "./ArtNFTFactory.sol";
 
 contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
     using SafeMath for uint256;
@@ -13,9 +14,10 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
     address public ART_NFT_MARKETPLACE;
 
     ArtNFTData public artNFTData;
-
-    constructor(ArtNFTData _artNFTData) public ArtNFTTradable(_artNFTData) {
+    ArtNFTFactory artNFTFactory;
+    constructor(ArtNFTData _artNFTData, address _factoryAddress) public ArtNFTTradable(_artNFTData) {
         artNFTData = _artNFTData;
+        artNFTFactory = ArtNFTFactory(_factoryAddress);
         address payable ART_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
@@ -31,8 +33,9 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
 
         // artTokenURI = ArtNFTData.getTokenURL(art.ipfsHashofArt);
         address buyer = msg.sender;
-        // ArtNFT artNFT = new ArtNFT(buyer, art.artNFTname, art.artNFTSymbol, artDetail.artNFTdetail, artTokenURI, art.artPrice);
-        // uint artId = 1;
+
+        uint artId = 1;
+        artNFTFactory.createNewArtNFT(art.artNFTname, artDetail.artNFTdetail, artDetail.artNFTspfield, art.artNFTSymbol, art.artPrice, art.ipfsHashofArt);
         // // artNFT.approve(buyer, artId);
         // address ownerBeforeOwnershipTransferred = artNFT.ownerOf(artId);
 
@@ -41,7 +44,8 @@ contract ArtNFTmarketplace is ArtNFTTradable, ArtNFTMarketplaceEvents {
         // artNFTData.updateStatus(artNFT, "Cancelled");
 
         // address ownerAfterOwnershipTransferred = artNFT.ownerOf(artId);
-        emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
+        // emit ArtNFTOwnershipChnaged(artNFT, artId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
+        emit ArtNFTOwnershipChnaged(artNFT, artId, _seller, buyer);
     }
     
     function ArtNFTUpdate(ArtNFT _artNFT, string memory title, string memory detail) public returns (bool) {

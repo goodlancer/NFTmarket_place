@@ -36,6 +36,10 @@ contract ArtNFTFactory is ArtNFTFactoryStorages {
         emit ArtNFTCreated(msg.sender, artNFT, nftName, nftSymbol, nftDetail, artPrice, ipfsHashOfArt);
     }
 
+    function sellingArtNFT(ArtNFT _artNFT, address buyer) public returns (bool) {
+        
+    }
+
     function baseTokenURI() public pure returns (string memory) {
         return "https://ipfs.io/ipfs/";
     }
