@@ -25,6 +25,7 @@
                     elevation="24"
                     class="border rounded-lg"
                     hide-input='true'
+                    @load="onImgLoad"
                     @click="uploadImg()"
                     @dragover="dragover"
                     @dragleave="dragleave"
@@ -139,6 +140,8 @@
 <script>
 import { mapActions } from 'vuex';
 import { initweb3, getWeb3 } from '@/web3Server';
+import $ from "jquery";
+
 
 const ipfs = require('@/components/ifpsEngine.js');
 
@@ -221,6 +224,9 @@ export default {
     onFileInfo(){
       console.log('sss')
     },
+    onImgLoad(){
+      alert('loading');
+    },
     onnftfilechange(){
       let self = this
       const nftfiles = this.$refs.nftfile.files
@@ -230,12 +236,13 @@ export default {
         var uril = e.target.result
         self.nftStateStr = '';
         self.nftContentdata = uril.split('base64,')[1]; //content image for the nft
-        self.$refs.nftdataImg.src = uril
+        self.$refs.nftdataImg.src = uril;
       }
       reader.readAsDataURL(nftfiles[0])
       var bufferReader = new FileReader();
       bufferReader.readAsArrayBuffer(nftfiles[0])
       bufferReader.onloadend = () => {
+        console.log(bufferReader.result);
         self.nftdata = Buffer(bufferReader.result);  //cover image for the nft trading
       }
     },
